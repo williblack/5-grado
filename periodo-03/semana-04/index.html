@@ -1,1 +1,361 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 7 y 8 - Seguridad en Internet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        /* Flip Card CSS */
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 200px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .flip-card-front {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid rgba(59, 130, 246, 0.5);
+        }
+        .flip-card-back {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid rgba(16, 185, 129, 0.5);
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto flex justify-end gap-3 mb-4 flex-wrap">
+        <a href="../../../index.html"
+           class="bg-slate-800/70 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 backdrop-blur">
+           ⬅ Inicio (Grado)
+        </a>
+        <a href="../../index.html"
+           class="bg-purple-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300">
+           ⬅ Menú del Periodo
+        </a>
+        <button type="button" onclick="copiarEnlace()"
+           class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300">
+           🔗 Copiar enlace
+        </button>
+    </div>
+
+    <div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/80 text-white px-4 py-3 rounded-xl shadow-lg backdrop-blur z-50">
+        Enlace copiado ✅
+    </div>
+
+    <header class="max-w-5xl mx-auto mb-12 text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-4 drop-shadow-lg">
+            🛡️ Protege tus Datos en Internet
+        </h1>
+        <h2 class="text-xl md:text-2xl font-semibold text-gray-300 mb-2">Colegio Santa Mariana de Jesús</h2>
+        <h3 class="text-lg text-cyan-300 mb-6">Prof. William Fdo Bernal | Grado 5</h3>
+        
+        <div class="glass-card rounded-2xl p-6 md:p-8 transform hover:scale-[1.02] transition-all duration-300">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-2"><i class="fas fa-bullseye"></i> Objetivo de Aprendizaje</h3>
+            <p class="text-lg">Aprenderemos qué son los datos personales, descubriremos los riesgos de Internet y construiremos nuestro "Escudo Protector" digital para navegar seguros.</p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto space-y-12">
+
+        <section class="glass-card rounded-3xl p-8">
+            <h2 class="text-3xl font-bold text-center text-blue-400 mb-8"><i class="fas fa-id-card"></i> ¿Qué son los Datos Personales?</h2>
+            <p class="text-center mb-8 text-lg">Son como las llaves de tu casa. ¡No se las das a cualquiera! Pasa el ratón sobre las tarjetas para descubrir cuáles son.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-user text-5xl mb-4 text-blue-300"></i>
+                            <h3 class="text-xl font-bold">Identidad</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="text-lg font-bold text-green-300">Tu Nombre y Edad</h3>
+                            <p class="text-sm mt-2">Nombres completos, cuántos años tienes o tu fecha de nacimiento.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-camera text-5xl mb-4 text-blue-300"></i>
+                            <h3 class="text-xl font-bold">Imágenes</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="text-lg font-bold text-green-300">Tus Fotos</h3>
+                            <p class="text-sm mt-2">Fotos tuyas, de tu familia o con el uniforme del colegio.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-key text-5xl mb-4 text-blue-300"></i>
+                            <h3 class="text-xl font-bold">Claves</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="text-lg font-bold text-green-300">Contraseñas</h3>
+                            <p class="text-sm mt-2">¡Súper secretas! Solo las deben saber tú y tus papás.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i class="fas fa-map-marker-alt text-5xl mb-4 text-blue-300"></i>
+                            <h3 class="text-xl font-bold">Ubicación</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <h3 class="text-lg font-bold text-green-300">Tu Dirección</h3>
+                            <p class="text-sm mt-2">Dónde vives o el lugar exacto donde estás en este momento.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8">
+            <h2 class="text-3xl font-bold text-center text-purple-400 mb-4"><i class="fas fa-chart-pie"></i> Laboratorio de Seguridad</h2>
+            <p class="text-center mb-6 text-lg">Haz clic en los botones para ver cómo cambian tus niveles de riesgo y seguridad al aplicar las normas en Internet.</p>
+            
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="w-full md:w-1/2 flex flex-col gap-4">
+                    <button onclick="updateChart('riesgo')" class="bg-red-500/20 border-2 border-red-500 hover:bg-red-500/40 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-skull-crossbones"></i> Acción Peligrosa (Hablar con extraños)
+                    </button>
+                    <button onclick="updateChart('seguro')" class="bg-green-500/20 border-2 border-green-500 hover:bg-green-500/40 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-shield-alt"></i> Acción Segura (Avisar a un adulto)
+                    </button>
+                    
+                    <div class="mt-4 p-4 bg-black/30 rounded-xl">
+                        <h4 class="font-bold text-yellow-300 mb-2">Normas de Oro:</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li><strong>Candado cerrado:</strong> No compartas contraseñas.</li>
+                            <li><strong>Cero extraños:</strong> No aceptes a gente que no conoces.</li>
+                            <li><strong>Botón de ayuda:</strong> Avisa a tus papás o profes si algo te asusta (Ciberacoso).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2 bg-white/5 p-4 rounded-xl border border-white/10">
+                    <canvas id="securityChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8">
+            <h2 class="text-3xl font-bold text-center text-yellow-400 mb-8"><i class="fas fa-gamepad"></i> Reto Final</h2>
+            
+            <div id="quiz-container" class="max-w-2xl mx-auto">
+                <div id="question-box" class="mb-6">
+                    <h3 id="question-text" class="text-2xl font-semibold mb-4 text-center">Pregunta aquí</h3>
+                    <div id="options-box" class="flex flex-col gap-3">
+                        </div>
+                </div>
+                <div id="feedback" class="text-center text-xl font-bold h-8 mb-4"></div>
+                <div class="flex justify-between items-center">
+                    <span id="score-display" class="font-bold text-cyan-300">Puntaje: 0/3</span>
+                    <button id="next-btn" class="hidden bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/30">Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div id="result-container" class="hidden max-w-2xl mx-auto text-center py-8">
+                <h3 class="text-4xl font-bold text-green-400 mb-4">¡Misión Cumplida!</h3>
+                <p id="final-score" class="text-2xl mb-6"></p>
+                <div class="bg-indigo-900/50 p-6 rounded-xl border border-indigo-400">
+                    <h4 class="text-xl font-bold text-yellow-300 mb-2">📝 Reto para la casa:</h4>
+                    <p>Habla con tus papás sobre el "Botón de Ayuda". Pregúntales a quién debes acudir si alguna vez ves algo extraño o peligroso en Internet.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-16 text-center py-6 border-t border-white/10 bg-black/40 backdrop-blur">
+        <p class="text-gray-400 font-medium tracking-wide">
+            © 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática
+        </p>
+    </footer>
+
+    <script>
+        // Función copiar enlace obligatoria
+        function copiarEnlace(){
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('toastCopiado');
+                if(t){
+                    t.classList.remove('hidden');
+                    setTimeout(()=> t.classList.add('hidden'), 2000);
+                } else {
+                    alert("Enlace copiado ✅");
+                }
+            }).catch(() => {
+                alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+            });
+        }
+
+        // Configuración Chart.js
+        const ctx = document.getElementById('securityChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Riesgo (Peligro)', 'Seguridad (Protección)'],
+                datasets: [{
+                    data: [50, 50],
+                    backgroundColor: ['#ef4444', '#10b981'],
+                    borderColor: ['#7f1d1d', '#064e3b'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom', labels: { color: 'white' } },
+                    tooltip: {
+                        callbacks: { label: function(context) { return context.label + ': ' + context.raw + '%'; } }
+                    }
+                },
+                animation: { animateScale: true, animateRotate: true }
+            }
+        });
+
+        function updateChart(state) {
+            if (state === 'riesgo') {
+                chart.data.datasets[0].data = [80, 20];
+            } else {
+                chart.data.datasets[0].data = [10, 90];
+            }
+            chart.update();
+        }
+
+        // Lógica del Micro-Quiz
+        const questions = [
+            {
+                q: "¿Cuál de estos es un dato personal que NO debes compartir en Internet?",
+                options: ["Tu color favorito", "Tu contraseña", "El nombre de tu mascota"],
+                correct: 1
+            },
+            {
+                q: "Si alguien en Internet te asusta o te hace sentir incómodo (Ciberacoso), ¿qué debes hacer?",
+                options: ["Avisar rápido a un adulto de confianza", "Quedarme callado y aguantar", "Pelear con esa persona"],
+                correct: 0
+            },
+            {
+                q: "¿Es seguro aceptar solicitudes de amistad de extraños?",
+                options: ["Sí, para ser más popular", "Solo si tienen una foto de perfil bonita", "No, nunca. Cero extraños."],
+                correct: 2
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionText = document.getElementById('question-text');
+        const optionsBox = document.getElementById('options-box');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const scoreDisplay = document.getElementById('score-display');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultContainer = document.getElementById('result-container');
+        const finalScore = document.getElementById('final-score');
+
+        function loadQuestion() {
+            answered = false;
+            feedback.textContent = "";
+            nextBtn.classList.add('hidden');
+            
+            const q = questions[currentQuestion];
+            questionText.textContent = `${currentQuestion + 1}. ${q.q}`;
+            
+            optionsBox.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 transition-all duration-300";
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(index, btn) {
+            if (answered) return;
+            answered = true;
+            
+            const correctIndex = questions[currentQuestion].correct;
+            const allBtns = optionsBox.querySelectorAll('button');
+            
+            if (index === correctIndex) {
+                btn.classList.replace('bg-white/10', 'bg-green-500/50');
+                btn.classList.replace('border-white/20', 'border-green-400');
+                feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle"></i> ¡Excelente!</span>';
+                score++;
+            } else {
+                btn.classList.replace('bg-white/10', 'bg-red-500/50');
+                btn.classList.replace('border-white/20', 'border-red-400');
+                allBtns[correctIndex].classList.replace('bg-white/10', 'bg-green-500/50');
+                feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-times-circle"></i> Cuidado, revisa la norma.</span>';
+            }
+            
+            scoreDisplay.textContent = `Puntaje: ${score}/${questions.length}`;
+            nextBtn.classList.remove('hidden');
+        }
+
+        nextBtn.onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+                finalScore.textContent = `Lograste ${score} de ${questions.length} respuestas correctas.`;
+            }
+        };
+
+        // Iniciar quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
