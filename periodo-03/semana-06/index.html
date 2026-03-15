@@ -1,1 +1,211 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase de Tecnología: El Teclado - Prof. William Fdo Bernal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.min.css"/>
+    <style>
+        .glass {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+        }
+        .key-btn {
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #1e293b;
+        }
+        .key-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #1e293b;
+        }
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            min-height: 100vh;
+            color: white;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto flex justify-end gap-3 mb-6">
+        <a href="../../../index.html" 
+           class="bg-slate-800/70 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 backdrop-blur border border-white/10">
+            ⬅ Inicio (Grado)
+        </a>
+        <a href="../../index.html" 
+           class="bg-purple-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300">
+            ⬅ Menú del Periodo
+        </a>
+        <button type="button" onclick="copiarEnlace()" 
+           class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300">
+            🔗 Copiar enlace
+        </button>
+    </div>
+
+    <div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/80 text-white px-4 py-3 rounded-xl shadow-lg backdrop-blur z-50">
+        Enlace copiado ✅
+    </div>
+
+    <main class="max-w-5xl mx-auto space-y-8">
+
+        <header class="text-center py-10 glass animate__animated animate__fadeIn">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                ⌨️ Misión: Dominando el Teclado
+            </h1>
+            <p class="text-xl opacity-90">Colegio Santa Mariana de Jesús</p>
+            <p class="text-md font-mono text-cyan-300 mt-2">Prof. William Fdo Bernal | 2026</p>
+            
+            <div class="mt-8 max-w-2xl mx-auto p-4 bg-white/10 rounded-2xl">
+                <span class="bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Objetivo de Hoy</span>
+                <p class="mt-2 text-lg">Aprender las partes del teclado y los "superpoderes" (combinaciones) para trabajar como un profesional.</p>
+            </div>
+        </header>
+
+        <section class="glass p-6 animate__animated animate__slideInLeft">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">📝 COPIAR AL CUADERNO</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">El Teclado: Nuestro Tablero de Control</h2>
+            <p class="mb-4 text-gray-200 leading-relaxed">
+                ¿Recuerdas que la semana pasada aprendimos a crear <b>contraseñas seguras</b>? 🛡️ ¡Hoy aprenderemos a escribirlas más rápido! El teclado se divide en zonas importantes:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ul class="space-y-2 text-gray-200">
+                    <li>🔹 <b>Teclas Alfanuméricas:</b> Letras y números (como en un celular).</li>
+                    <li>🔹 <b>Teclas Especiales:</b> <i>Enter</i> (para bajar), <i>Espacio</i> y <i>Shift</i>.</li>
+                    <li>🔹 <b>Teclas de Control:</b> ¡Las que activan los superpoderes! (Ctrl, Alt).</li>
+                </ul>
+                <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                    <p class="text-sm italic text-cyan-200">"El teclado es la extensión de tus manos en el mundo digital."</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass p-6 animate__animated animate__zoomIn">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full">💻 INTERACTUAR EN EL PC</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">Simulador de Superpoderes (Shortcuts)</h2>
+            <p class="text-center mb-6 opacity-80 text-sm">Haz clic en los botones para ver qué hace cada combinación:</p>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <button onclick="showPower('C', 'Copiar', 'Has tomado una foto invisible de lo que seleccionaste. 📸')" 
+                        class="key-btn bg-slate-700 p-4 rounded-lg hover:bg-slate-600">
+                    <span class="block text-2xl font-bold">Ctrl + C</span>
+                    <span class="text-xs text-cyan-300">Copiar</span>
+                </button>
+                <button onclick="showPower('V', 'Pegar', '¡Magia! Lo que copiaste ahora aparece aquí. 📋')" 
+                        class="key-btn bg-slate-700 p-4 rounded-lg hover:bg-slate-600">
+                    <span class="block text-2xl font-bold">Ctrl + V</span>
+                    <span class="text-xs text-emerald-300">Pegar</span>
+                </button>
+                <button onclick="showPower('X', 'Cortar', 'Lo quitas de un lugar para llevarlo a otro. ✂️')" 
+                        class="key-btn bg-slate-700 p-4 rounded-lg hover:bg-slate-600">
+                    <span class="block text-2xl font-bold">Ctrl + X</span>
+                    <span class="text-xs text-red-300">Cortar</span>
+                </button>
+                <button onclick="showPower('G', 'Guardar', '¡Tu trabajo está a salvo! No se borrará nada. 💾')" 
+                        class="key-btn bg-slate-700 p-4 rounded-lg hover:bg-slate-600">
+                    <span class="block text-2xl font-bold">Ctrl + G</span>
+                    <span class="text-xs text-yellow-300">Guardar</span>
+                </button>
+            </div>
+
+            <div id="powerScreen" class="mt-8 p-6 bg-black/40 rounded-2xl min-h-[120px] flex flex-col items-center justify-center text-center border border-white/10">
+                <p id="powerTitle" class="text-2xl font-bold text-white mb-2">Presiona un botón</p>
+                <p id="powerDesc" class="text-gray-300">¿Qué superpoder quieres probar hoy?</p>
+            </div>
+        </section>
+
+        <section class="glass p-6 animate__animated animate__slideInRight">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full">🖥️ TRABAJO EN LA SALA</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">¡A la acción! (Reto 45 min)</h2>
+            <div class="space-y-4">
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 rounded-full bg-cyan-500 flex-shrink-0 flex items-center justify-center font-bold">1</div>
+                    <p>Abre un documento nuevo en <b>Word o Bloc de Notas</b>.</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 rounded-full bg-cyan-500 flex-shrink-0 flex items-center justify-center font-bold">2</div>
+                    <p>Escribe tu nombre completo y tu contraseña segura (inventada) de la clase anterior.</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 rounded-full bg-cyan-500 flex-shrink-0 flex items-center justify-center font-bold">3</div>
+                    <p>Selecciona tu nombre, usa <b>Ctrl + C</b>, baja un renglón y usa <b>Ctrl + V</b> (¡repite 5 veces!).</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-8 h-8 rounded-full bg-cyan-500 flex-shrink-0 flex items-center justify-center font-bold">4</div>
+                    <p>Guarda tu archivo con el nombre "Practica Teclado" usando <b>Ctrl + G</b> o <b>Ctrl + S</b>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">🔍 INVESTIGACIÓN</span>
+            </div>
+            <p class="text-lg">Pregúntale a Google: <b>"¿Para qué sirve la tecla Esc y en qué parte del teclado está?"</b></p>
+        </section>
+
+        <section class="glass p-6 bg-gradient-to-br from-indigo-900/40 to-slate-900/40">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">📄 TAREA EN HOJA SUELTA</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-4">Dibujo de mi Centro de Mando</h2>
+            <p class="mb-4">Dibuja un teclado en una hoja y encierra con colores las zonas aprendidas:</p>
+            
+            <div class="border-2 border-dashed border-white/30 p-8 rounded-xl bg-white/5 relative">
+                <div class="grid grid-cols-6 gap-2 opacity-50 mb-4">
+                    <div class="h-8 bg-gray-500 rounded"></div>
+                    <div class="h-8 bg-gray-500 rounded"></div>
+                    <div class="h-8 bg-gray-500 rounded"></div>
+                    <div class="h-8 bg-blue-400 rounded"></div>
+                    <div class="h-8 bg-blue-400 rounded"></div>
+                    <div class="h-8 bg-blue-400 rounded"></div>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm font-bold uppercase text-pink-400">Ejemplo de Entrega</p>
+                    <p class="text-xs italic">Encierra en Rojo: Teclas de Control | Encierra en Azul: Teclas Alfanuméricas</p>
+                </div>
+                <div class="absolute bottom-2 right-4 text-[10px] opacity-40">William Fdo Bernal - 2026</div>
+            </div>
+        </section>
+
+        <footer class="text-center py-8 opacity-60 text-sm">
+            <p>© 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática</p>
+            <p>Colegio Santa Mariana de Jesús | Buga, Valle del Cauca</p>
+        </footer>
+
+    </main>
+
+    <script>
+        function showPower(key, title, desc) {
+            const screen = document.getElementById('powerScreen');
+            const pTitle = document.getElementById('powerTitle');
+            const pDesc = document.getElementById('powerDesc');
+
+            screen.classList.add('animate__animated', 'animate__pulse');
+            pTitle.innerText = "Ctrl + " + key + " = " + title;
+            pDesc.innerText = desc;
+
+            setTimeout(() => screen.classList.remove('animate__animated', 'animate__pulse'), 500);
+        }
+
+        function copiarEnlace(){
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('toastCopiado');
+                t.classList.remove('hidden');
+                setTimeout(()=> t.classList.add('hidden'), 2000);
+            }).catch(() => {
+                alert("No se pudo copiar automáticamente. Copia el enlace manualmente.");
+            });
+        }
+    </script>
+</body>
+</html>
