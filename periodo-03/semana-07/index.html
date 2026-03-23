@@ -1,1 +1,437 @@
-hola
+h<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase de Tecnología - Magia con el Teclado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-attachment: fixed;
+        }
+        
+        /* Efecto Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* Flip Cards 3D */
+        .flip-card {
+            background-color: transparent;
+            height: 250px;
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+        .flip-card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+        .flip-card-back {
+            background: white;
+            color: #4a5568;
+            transform: rotateY(180deg);
+            border: 4px solid #764ba2;
+        }
+
+        /* Animaciones personalizadas */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .floating { animation: float 3s ease-in-out infinite; }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(167, 139, 250, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(167, 139, 250, 0); }
+        }
+        .btn-magic { animation: pulse-glow 2s infinite; }
+    </style>
+</head>
+<body class="p-4 md:p-8 text-slate-800">
+
+    <div class="max-w-5xl mx-auto flex justify-end gap-3 mb-4">
+        <a href="../../../index.html"
+           class="bg-slate-800/70 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 backdrop-blur font-bold">
+           ⬅ Inicio (Grado)
+        </a>
+      
+        <a href="../../index.html"
+           class="bg-purple-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 font-bold">
+           ⬅ Menú del Periodo
+        </a>
+      
+        <button type="button" onclick="copiarEnlace()"
+           class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 font-bold">
+           🔗 Copiar enlace
+        </button>
+    </div>
+      
+    <div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/80 text-white px-6 py-4 rounded-xl shadow-2xl backdrop-blur font-bold z-50 transform transition-all">
+        ¡Enlace mágico copiado! ✨✅
+    </div>
+    <main class="max-w-5xl mx-auto space-y-8">
+        
+        <header class="glass-card p-8 text-center relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 text-9xl opacity-20 floating">🎩</div>
+            <div class="absolute -bottom-10 -right-10 text-9xl opacity-20 floating" style="animation-delay: 1s;">🪄</div>
+            
+            <h2 class="text-xl font-bold text-purple-700 mb-2 tracking-wider uppercase">Colegio Santa Mariana de Jesús</h2>
+            <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-4 drop-shadow-sm">
+                ¡Trucos de Magia con el Teclado!
+            </h1>
+            <p class="text-lg font-bold text-slate-600 mb-6">Prof. William Fdo Bernal</p>
+            
+            <div class="inline-block bg-white/60 px-6 py-3 rounded-2xl border border-white shadow-sm">
+                <p class="text-xl font-bold text-emerald-600">🎯 Misión de Hoy:</p>
+                <p class="text-lg font-semibold text-slate-700">Aprender los atajos secretos para ser los magos más rápidos del computador.</p>
+            </div>
+        </header>
+
+        <section class="glass-card p-6 md:p-8 hover:shadow-2xl transition-all duration-300">
+            <div class="mb-4">
+                <span class="bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase shadow-md flex inline-flex items-center gap-2">
+                    <span>📝</span> COPIAR AL CUADERNO
+                </span>
+            </div>
+            <h3 class="text-2xl font-bold mb-4 flex items-center gap-2 text-blue-800">
+                <span>📚</span> El Libro de Hechizos
+            </h3>
+            <p class="mb-4 font-bold text-slate-600 bg-white/50 p-3 rounded-xl border border-white">
+                Tema Anterior: Misión: Dominando el Teclado ⌨️
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+                <ul class="space-y-3 text-lg font-semibold">
+                    <li class="flex items-center gap-3 bg-white/40 p-3 rounded-xl">
+                        <span class="text-2xl">🕸️</span> <b>Ctrl + E:</b> La Red Gigante (Atrapa todo).
+                    </li>
+                    <li class="flex items-center gap-3 bg-white/40 p-3 rounded-xl">
+                        <span class="text-2xl">⏪</span> <b>Ctrl + Z:</b> Máquina del tiempo atrás (Deshacer).
+                    </li>
+                    <li class="flex items-center gap-3 bg-white/40 p-3 rounded-xl">
+                        <span class="text-2xl">⏩</span> <b>Ctrl + Y:</b> Máquina del tiempo adelante (Rehacer).
+                    </li>
+                </ul>
+                <div class="flex justify-center items-center">
+                    <div class="text-8xl floating drop-shadow-lg">🧙‍♂️</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-3 gap-6">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front shadow-xl">
+                        <div class="text-6xl mb-4">🕸️</div>
+                        <h3 class="text-2xl font-black">Ctrl + E</h3>
+                        <p class="font-bold text-purple-100 mt-2">Toca para girar</p>
+                    </div>
+                    <div class="flip-card-back shadow-xl">
+                        <h3 class="text-xl font-bold text-purple-600 mb-2">¡La Red Gigante!</h3>
+                        <p class="font-bold">Es como lanzar una gran red de pesca.</p>
+                        <p class="text-sm mt-2 font-semibold">¡Selecciona todas las palabras de un solo golpe!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front shadow-xl" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
+                        <div class="text-6xl mb-4">⏪</div>
+                        <h3 class="text-2xl font-black">Ctrl + Z</h3>
+                        <p class="font-bold text-orange-100 mt-2">Toca para girar</p>
+                    </div>
+                    <div class="flip-card-back shadow-xl border-orange-400">
+                        <h3 class="text-xl font-bold text-orange-600 mb-2">¡Viaje al Pasado!</h3>
+                        <p class="font-bold">¿Te equivocaste o borraste algo?</p>
+                        <p class="text-sm mt-2 font-semibold">Te regresa al paso anterior. ¡Magia pura!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front shadow-xl" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <div class="text-6xl mb-4">⏩</div>
+                        <h3 class="text-2xl font-black">Ctrl + Y</h3>
+                        <p class="font-bold text-emerald-100 mt-2">Toca para girar</p>
+                    </div>
+                    <div class="flip-card-back shadow-xl border-emerald-400">
+                        <h3 class="text-xl font-bold text-emerald-600 mb-2">¡Viaje al Futuro!</h3>
+                        <p class="font-bold">Si viajaste al pasado y quieres volver.</p>
+                        <p class="text-sm mt-2 font-semibold">Rehace lo que acabas de deshacer.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card p-6 md:p-8 border-4 border-pink-400 border-dashed relative overflow-hidden">
+            <div class="flex flex-wrap gap-2 mb-6 relative z-10">
+                <span class="bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase shadow-md flex items-center gap-2">
+                    <span>🖥️</span> TRABAJO EN LA SALA
+                </span>
+                <span class="bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase shadow-md flex items-center gap-2">
+                    <span>💻</span> INTERACTUAR EN EL PC
+                </span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 relative z-10">
+                <div>
+                    <h3 class="text-2xl font-black text-pink-600 mb-4">🎮 Simulador: El Caldero Mágico</h3>
+                    <div class="bg-white/60 p-5 rounded-2xl shadow-sm border border-white">
+                        <p class="font-bold mb-3 text-lg">Sigue estos pasos:</p>
+                        <ol class="space-y-3 font-semibold text-lg">
+                            <li class="flex gap-2"><span class="bg-pink-500 text-white w-7 h-7 rounded-full flex items-center justify-center shrink-0">1</span> Escribe una frase mágica en el caldero.</li>
+                            <li class="flex gap-2"><span class="bg-pink-500 text-white w-7 h-7 rounded-full flex items-center justify-center shrink-0">2</span> Haz clic dentro y presiona <b>Ctrl + E</b>.</li>
+                            <li class="flex gap-2"><span class="bg-pink-500 text-white w-7 h-7 rounded-full flex items-center justify-center shrink-0">3</span> Borra todo con la tecla <b>Retroceso (Backspace)</b>.</li>
+                            <li class="flex gap-2"><span class="bg-pink-500 text-white w-7 h-7 rounded-full flex items-center justify-center shrink-0">4</span> Usa <b>Ctrl + Z</b> para revivir la frase.</li>
+                            <li class="flex gap-2"><span class="bg-pink-500 text-white w-7 h-7 rounded-full flex items-center justify-center shrink-0">5</span> Usa <b>Ctrl + Y</b> para borrarla de nuevo.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-3xl shadow-2xl text-center relative border-4 border-slate-700">
+                    <div class="text-5xl absolute -top-6 -right-6 floating">🦇</div>
+                    <h4 class="text-white font-bold text-xl mb-3">Tu Caldero Mágico 🥘</h4>
+                    
+                    <textarea id="magicInput" class="w-full h-32 p-4 rounded-xl text-xl font-bold bg-slate-900 text-green-400 border-2 border-purple-500 focus:outline-none focus:border-pink-500 resize-none mb-4" placeholder="Escribe tu hechizo aquí... (Ej: ¡Abra Cadabra!)"></textarea>
+                    
+                    <div id="gameFeedback" class="h-10 text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-500 transition-all duration-300 transform scale-100">
+                        ¡Esperando magia! ✨
+                    </div>
+
+                    <div class="flex justify-center gap-2 mt-4 hidden" id="mobileHelpers">
+                        <button onclick="simulateCtrlE()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm font-bold">Simular Ctrl+E</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-6">
+            
+            <div class="glass-card p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300">
+                <span class="bg-orange-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase shadow-md flex items-center gap-2 inline-flex mb-4">
+                    <span>🔍</span> INVESTIGACIÓN
+                </span>
+                <h3 class="text-xl font-black text-orange-700 mb-3">El Gran Detective 🕵️‍♂️</h3>
+                <p class="font-bold text-lg mb-4">Abre Google y busca la respuesta a esta pregunta:</p>
+                <div class="bg-white/60 p-4 rounded-xl border border-orange-200 shadow-inner">
+                    <p class="text-lg font-black text-slate-700 text-center">
+                        "¿Para qué sirve el atajo <br><span class="text-orange-600 text-2xl">Ctrl + G</span> en Word?"
+                    </p>
+                </div>
+                <p class="text-sm font-bold text-center mt-3 text-slate-500">¡Escribe la respuesta en tu cuaderno!</p>
+            </div>
+
+            <div class="glass-card p-6 md:p-8 hover:-translate-y-2 transition-transform duration-300">
+                <span class="bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-full uppercase shadow-md flex items-center gap-2 inline-flex mb-4">
+                    <span>📄</span> TAREA EN HOJA SUELTA
+                </span>
+                <h3 class="text-xl font-black text-emerald-700 mb-3">Tu Propio Teclado 🎨</h3>
+                <p class="font-bold text-lg mb-4">Instrucciones:</p>
+                <ul class="font-semibold mb-4 space-y-1">
+                    <li>1. Toma una hoja de block sin líneas.</li>
+                    <li>2. Dibuja un teclado gigante.</li>
+                    <li>3. Pinta de <span class="text-red-500 font-black">ROJO</span> la tecla <b>Ctrl</b>.</li>
+                    <li>4. Pinta de <span class="text-blue-500 font-black">AZUL</span> las letras <b>E, Z, Y</b>.</li>
+                </ul>
+                
+                <div class="bg-white p-3 rounded-lg border-2 border-emerald-300 shadow-sm relative">
+                    <div class="absolute -top-3 -right-3 text-2xl">📌</div>
+                    <p class="text-xs font-bold text-emerald-600 mb-2 uppercase text-center">Ejemplo Visual</p>
+                    <div class="border border-slate-300 h-20 bg-slate-50 flex items-center justify-center gap-2 rounded">
+                        <div class="w-10 h-10 border-2 border-slate-400 rounded flex items-center justify-center font-bold text-xs bg-red-100 text-red-600">Ctrl</div>
+                        <div class="w-8 h-8 border border-slate-400 rounded"></div>
+                        <div class="w-10 h-10 border-2 border-slate-400 rounded flex items-center justify-center font-bold text-xs bg-blue-100 text-blue-600">E</div>
+                        <div class="w-10 h-10 border-2 border-slate-400 rounded flex items-center justify-center font-bold text-xs bg-blue-100 text-blue-600">Z</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card p-8 text-center relative">
+            <h3 class="text-3xl font-black text-slate-800 mb-6 flex justify-center items-center gap-3">
+                <span>🏆</span> Reto Final de Magia
+            </h3>
+            
+            <div id="quizContainer" class="max-w-2xl mx-auto bg-white/70 p-6 rounded-2xl shadow-lg border border-white">
+                <h4 id="questionText" class="text-2xl font-bold mb-6 text-purple-700">1. ¿Qué atajo funciona como una "Red Gigante"?</h4>
+                
+                <div class="grid grid-cols-1 gap-3" id="optionsContainer">
+                    <button class="quiz-btn bg-slate-100 hover:bg-purple-100 border-2 border-slate-200 hover:border-purple-400 text-lg font-bold p-4 rounded-xl transition-all" onclick="checkAnswer(0)">Ctrl + Z</button>
+                    <button class="quiz-btn bg-slate-100 hover:bg-purple-100 border-2 border-slate-200 hover:border-purple-400 text-lg font-bold p-4 rounded-xl transition-all" onclick="checkAnswer(1)">Ctrl + E</button>
+                    <button class="quiz-btn bg-slate-100 hover:bg-purple-100 border-2 border-slate-200 hover:border-purple-400 text-lg font-bold p-4 rounded-xl transition-all" onclick="checkAnswer(2)">Ctrl + Y</button>
+                </div>
+            </div>
+            
+            <div id="quizResult" class="hidden mt-6 text-3xl font-black text-emerald-600 floating">
+                ¡Eres un Mago del Teclado Maestro! 🧙‍♂️🌟
+            </div>
+        </section>
+
+        <footer class="bg-slate-900 text-white text-center py-6 rounded-3xl mt-12 shadow-2xl">
+            <p class="font-bold tracking-widest text-sm text-slate-400 uppercase">Área de Tecnología e Informática</p>
+            <p class="text-lg font-black mt-1">© 2026 | Prof. William Fdo Bernal</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // 1. Lógica de Copiar Enlace
+        function copiarEnlace() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('toastCopiado');
+                if(t) {
+                    t.classList.remove('hidden');
+                    t.classList.add('translate-y-4');
+                    setTimeout(() => {
+                        t.classList.add('hidden');
+                        t.classList.remove('translate-y-4');
+                    }, 2500);
+                } else {
+                    alert("Enlace copiado ✅");
+                }
+            }).catch(() => {
+                alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+            });
+        }
+
+        // 2. Simulador: El Caldero Mágico (JS + DOM Events)
+        const magicInput = document.getElementById('magicInput');
+        const gameFeedback = document.getElementById('gameFeedback');
+        
+        // Historial simple para simular Z y Y visualmente en el feedback si el textarea nativo falla
+        let lastAction = "";
+
+        magicInput.addEventListener('keydown', function(e) {
+            // Prevenir comportamientos por defecto si queremos gamificarlo mucho, 
+            // pero es mejor dejar la acción nativa y solo reaccionar visualmente.
+            
+            if (e.ctrlKey && (e.key === 'e' || e.key === 'E')) {
+                // Ctrl + E
+                triggerMagicFeedback('¡Red Gigante Lanzada! 🕸️', ['#a855f7', '#d946ef']);
+                lanzarConfeti(100, 50, ['#a855f7', '#d946ef']);
+            } 
+            else if (e.ctrlKey && (e.key === 'z' || e.key === 'Z')) {
+                // Ctrl + Z
+                triggerMagicFeedback('¡Viaje al Pasado! ⏪', ['#fbbf24', '#ea580c']);
+                lanzarConfeti(90, 180, ['#f59e0b', '#fbbf24']);
+            }
+            else if (e.ctrlKey && (e.key === 'y' || e.key === 'Y')) {
+                // Ctrl + Y
+                triggerMagicFeedback('¡Viaje al Futuro! ⏩', ['#34d399', '#059669']);
+                lanzarConfeti(90, 0, ['#10b981', '#34d399']);
+            }
+        });
+
+        function triggerMagicFeedback(texto, colores) {
+            gameFeedback.style.transform = "scale(1.2)";
+            gameFeedback.innerHTML = texto;
+            
+            setTimeout(() => {
+                gameFeedback.style.transform = "scale(1)";
+            }, 300);
+        }
+
+        function lanzarConfeti(angle, spread, colors) {
+            confetti({
+                particleCount: 80,
+                spread: spread,
+                origin: { y: 0.6 },
+                colors: colors
+            });
+        }
+
+        // 3. Lógica del Mini-Quiz Gamificado
+        const quizData = [
+            { q: "1. ¿Qué atajo funciona como una 'Red Gigante'?", opts: ["Ctrl + Z", "Ctrl + E", "Ctrl + Y"], ans: 1 },
+            { q: "2. Si borras algo por accidente, ¿qué botón es la Máquina del Tiempo atrás?", opts: ["Ctrl + Y", "La barra espaciadora", "Ctrl + Z"], ans: 2 },
+            { q: "3. ¿Qué hace Ctrl + Y?", opts: ["Apaga el PC", "Rehace (viaje al futuro)", "Pinta la pantalla"], ans: 1 }
+        ];
+        
+        let currentQ = 0;
+
+        function renderQuestion() {
+            if(currentQ >= quizData.length) {
+                document.getElementById('quizContainer').classList.add('hidden');
+                document.getElementById('quizResult').classList.remove('hidden');
+                confetti({ particleCount: 150, spread: 180, origin: { y: 0.3 } });
+                return;
+            }
+            const q = quizData[currentQ];
+            document.getElementById('questionText').innerText = q.q;
+            const btns = document.querySelectorAll('.quiz-btn');
+            btns.forEach((btn, index) => {
+                btn.innerText = q.opts[index];
+                btn.className = "quiz-btn bg-slate-100 hover:bg-purple-100 border-2 border-slate-200 hover:border-purple-400 text-lg font-bold p-4 rounded-xl transition-all";
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const btns = document.querySelectorAll('.quiz-btn');
+            const correctIndex = quizData[currentQ].ans;
+            
+            if (selectedIndex === correctIndex) {
+                btns[selectedIndex].classList.replace('bg-slate-100', 'bg-emerald-400');
+                btns[selectedIndex].classList.replace('text-slate-800', 'text-white');
+                btns[selectedIndex].classList.add('scale-105');
+                
+                setTimeout(() => {
+                    currentQ++;
+                    renderQuestion();
+                }, 1000);
+            } else {
+                btns[selectedIndex].classList.replace('bg-slate-100', 'bg-red-400');
+                btns[selectedIndex].classList.replace('text-slate-800', 'text-white');
+                
+                // Efecto de vibración
+                btns[selectedIndex].animate([
+                    { transform: 'translateX(0px)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(0px)' }
+                ], { duration: 400 });
+                
+                setTimeout(() => {
+                    btns[selectedIndex].classList.replace('bg-red-400', 'bg-slate-100');
+                    btns[selectedIndex].classList.replace('text-white', 'text-slate-800');
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>
