@@ -1,1 +1,227 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase: Plataformas y Artefactos | Prof. William Fdo Bernal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .card-hover:hover { transform: translateY(-5px); transition: all 0.3s ease; }
+        .flip-card { perspective: 1000px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 1rem; }
+        .flip-card-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-emerald-50 min-h-screen pb-12">
+
+    <nav class="max-w-6xl mx-auto p-4 flex justify-end gap-3 sticky top-0 z-50">
+        <a href="../../../index.html" class="bg-slate-800/70 text-white px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 backdrop-blur text-sm font-semibold">
+            ⬅ Inicio (Grado)
+        </a>
+        <a href="../../index.html" class="bg-purple-600 text-white px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 text-sm font-semibold">
+            ⬅ Menú del Periodo
+        </a>
+        <button type="button" onclick="copiarEnlace()" class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 text-sm font-semibold flex items-center gap-2">
+            🔗 Copiar enlace
+        </button>
+    </nav>
+
+    <div id="toastCopiado" class="fixed top-20 right-6 hidden bg-black/80 text-white px-6 py-3 rounded-2xl shadow-2xl backdrop-blur z-[60] animate-bounce">
+        ¡Enlace copiado con éxito! ✅
+    </div>
+
+    <header class="max-w-5xl mx-auto px-4 mt-8 text-center">
+        <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Tecnología e Informática - Grado 5°</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold text-slate-800 mt-4 mb-2">Mi Mundo Tecnológico 🚀</h1>
+        <p class="text-xl text-slate-600 font-medium">Colegio Santa Mariana de Jesús (Buga)</p>
+        <p class="text-lg text-purple-700 font-bold italic mb-8">Prof. William Fdo Bernal</p>
+
+        <div class="glass p-8 rounded-3xl shadow-xl max-w-3xl mx-auto border-t-4 border-blue-500">
+            <h2 class="text-xl font-bold text-blue-800 mb-2">🎯 Objetivo de Hoy</h2>
+            <p class="text-slate-700 leading-relaxed">
+                Aprenderemos a navegar en nuestra "Mochila Virtual" (plataforma) y descubriremos la diferencia entre las herramientas simples y los artefactos complejos que usamos en casa y el colegio.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-12 space-y-12">
+
+        <section class="space-y-4">
+            <span class="bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-tighter">[📝 COPIAR AL CUADERNO]</span>
+            <div class="glass p-8 rounded-3xl shadow-lg space-y-6">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        🌟 De los Formularios a la Acción
+                    </h3>
+                    <p class="text-slate-600 mt-2">
+                        En el periodo pasado diseñamos formularios visuales. Ahora, usaremos la <b>Plataforma Escolar</b> como nuestro medio de consulta favorito. ¡Es nuestra gran biblioteca digital!
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-100/50 p-6 rounded-2xl border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-800 text-lg">🔧 Herramientas</h4>
+                        <p class="text-sm text-slate-700 mt-2">Son objetos <b>simples</b> que usamos con la fuerza de nuestras manos. <br><i>Ejemplo: Lápiz, Tijeras, Martillo.</i></p>
+                    </div>
+                    <div class="bg-purple-100/50 p-6 rounded-2xl border-l-4 border-purple-500">
+                        <h4 class="font-bold text-purple-800 text-lg">🤖 Artefactos</h4>
+                        <p class="text-sm text-slate-700 mt-2">Son máquinas <b>complejas</b> que usan energía para funcionar. <br><i>Ejemplo: Computador, Nevera, Celular.</i></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <span class="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-tighter">[💻 INTERACTUAR EN EL PC]</span>
+            <div class="glass p-8 rounded-3xl shadow-lg text-center">
+                <h3 class="text-2xl font-bold text-slate-800 mb-6">Laboratorio de Datos: ¿Qué usamos más?</h3>
+                <p class="mb-6 text-slate-600">Haz clic en los botones para comparar el uso de Herramientas vs Artefactos.</p>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <button onclick="updateChart('casa')" class="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition shadow-md">En Casa</button>
+                    <button onclick="updateChart('colegio')" class="bg-purple-500 text-white px-6 py-2 rounded-full hover:bg-purple-600 transition shadow-md">En el Colegio</button>
+                </div>
+
+                <div class="bg-white/50 p-4 rounded-2xl shadow-inner max-w-lg mx-auto">
+                    <canvas id="myChart" height="250"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <span class="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-tighter">[🖥️ TRABAJO EN LA SALA]</span>
+            <div class="glass p-8 rounded-3xl shadow-lg border-2 border-emerald-100">
+                <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">💪 El Reto del Inventor y el Mago de Excel</h3>
+                
+                <div class="space-y-6">
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">1</div>
+                        <p class="text-slate-700"><b>Dibuja en tu cuaderno:</b> El artefacto (máquina) que más usas para estudiar en casa.</p>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">2</div>
+                        <div class="space-y-2">
+                            <p class="text-slate-700 font-bold">🪄 Super Prompt Maestro (Copia esto para la IA):</p>
+                            <div class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs font-mono select-all shadow-inner overflow-x-auto">
+                                "Crea una tabla para Excel con 5 ejemplos de objetos tecnológicos. Columnas: Nombre, Tipo (Herramienta o Artefacto), Lugar donde se usa y Función. Genera los datos para que yo los pueda copiar y pegar."
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start">
+                        <div class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold">3</div>
+                        <p class="text-slate-700"><b>Formato Pro en Excel:</b> Una vez pegada la tabla, pon los encabezados en <b>Negrita</b>, color de fondo azul claro, texto <b>centrado</b> y ajusta el ancho de las columnas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <div class="glass p-8 rounded-3xl shadow-lg bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-200">
+                <h3 class="text-2xl font-bold text-indigo-800 mb-6 text-center">🧠 Micro-Quiz de Rapidez</h3>
+                <div id="quizContainer" class="space-y-6">
+                    <div class="p-6 bg-white/60 rounded-2xl shadow-sm">
+                        <p class="font-bold text-slate-800 mb-4 text-lg">1. ¿Qué es un destornillador?</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <button onclick="checkQuiz(this, false)" class="p-4 bg-white border-2 border-slate-200 rounded-xl hover:border-indigo-400 transition text-left">A. Un Artefacto Complejo</button>
+                            <button onclick="checkQuiz(this, true)" class="p-4 bg-white border-2 border-slate-200 rounded-xl hover:border-indigo-400 transition text-left">B. Una Herramienta Simple</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <span class="bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-tighter">[🔍 INVESTIGACIÓN]</span>
+            <div class="glass p-8 rounded-3xl shadow-lg flex items-center gap-6">
+                <div class="text-4xl">🌎</div>
+                <div>
+                    <h4 class="font-bold text-slate-800">Misión de búsqueda:</h4>
+                    <p class="text-slate-600 italic">"Busca en Google: ¿Cómo se llamaba el primer artefacto que ayudó a los humanos a contar?" (Escribe la respuesta en tu cuaderno).</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-20 text-center py-8 border-t border-slate-200">
+        <p class="text-slate-500 font-semibold tracking-wide">
+            © 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática
+        </p>
+        <p class="text-xs text-slate-400 mt-1 uppercase">Colegio Santa Mariana de Jesús</p>
+    </footer>
+
+    <script>
+        // Lógica de Copiar Enlace
+        function copiarEnlace(){
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('toastCopiado');
+                t.classList.remove('hidden');
+                setTimeout(()=> t.classList.add('hidden'), 2500);
+            }).catch(() => {
+                alert("Enlace copiado ✅");
+            });
+        }
+
+        // Lógica de Chart.js
+        let myChart;
+        function initChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Artefactos', 'Herramientas'],
+                    datasets: [{
+                        label: 'Cantidad promedio detectada',
+                        data: [12, 5],
+                        backgroundColor: ['#6366f1', '#10b981'],
+                        borderRadius: 15,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function updateChart(context) {
+            if(context === 'casa') {
+                myChart.data.datasets[0].data = [15, 8];
+            } else {
+                myChart.data.datasets[0].data = [10, 20];
+            }
+            myChart.update();
+        }
+
+        // Lógica Quiz
+        function checkQuiz(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('button');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.remove('hover:border-indigo-400');
+            });
+            if(isCorrect) {
+                btn.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-700');
+                btn.innerHTML += " ✅";
+            } else {
+                btn.classList.add('bg-red-100', 'border-red-500', 'text-red-700');
+                btn.innerHTML += " ❌";
+            }
+        }
+
+        window.onload = initChart;
+    </script>
+</body>
+</html>
