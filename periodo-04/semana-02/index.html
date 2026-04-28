@@ -1,19 +1,9 @@
-import os
-
-# Definición de variables según el prompt
-grado_repo = "5-grado"
-periodo_carpeta = "periodo-4"
-semana_carpeta = "semana-02"
-tema_actual = "¡Manos a la Obra con PowerPoint!"
-docente = "William Fdo Bernal"
-
-html_content = f"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{tema_actual} - Grado 5°</title>
+    <title>¡Manos a la Obra con PowerPoint! - Grado 5°</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -48,8 +38,8 @@ html_content = f"""
             <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
             <div class="relative z-10">
                 <span class="bg-white/20 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Colegio Santa Mariana de Jesús</span>
-                <h1 class="text-4xl md:text-5xl font-extrabold mt-4 mb-2">{tema_actual}</h1>
-                <p class="text-blue-100 text-lg">Prof. {docente} | Tecnología e Informática</p>
+                <h1 class="text-4xl md:text-5xl font-extrabold mt-4 mb-2">¡Manos a la Obra con PowerPoint!</h1>
+                <p class="text-blue-100 text-lg">Prof. William Fdo Bernal | Tecnología e Informática</p>
                 <div class="mt-6 flex items-center gap-3">
                    <div class="bg-white/20 backdrop-blur p-4 rounded-2xl flex-1">
                        <p class="text-sm font-medium"><span class="mr-2">🎯</span><strong>Objetivo:</strong> Aprender a comunicar ideas visuales usando PowerPoint mientras cuidamos nuestros equipos tecnológicos.</p>
@@ -245,11 +235,3 @@ html_content = f"""
     </script>
 </body>
 </html>
-"""
-
-# Generación del archivo
-file_name = "index.html"
-with open(file_name, "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-print(f"Web App generada exitosamente: {file_name}")
