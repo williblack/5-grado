@@ -6,31 +6,59 @@
   <title>🎨 Diapositivas + 🦺 Seguridad Industrial | Grado 5°</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Configuración de Tailwind para CDN
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
-    
     body { 
       font-family: 'Nunito', sans-serif; 
       background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
       min-height: 100vh;
+      margin: 0;
+      padding: 0;
     }
     
+    /* Glassmorphism compatible con Chrome */
     .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     
     .glass-dark {
-      background: rgba(30, 41, 59, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(30, 41, 59, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     
+    /* Flip Cards - Versión simplificada y compatible */
     .flip-card {
       perspective: 1000px;
-      height: 200px;
+      height: 180px;
       cursor: pointer;
     }
     
@@ -39,7 +67,7 @@
       width: 100%;
       height: 100%;
       text-align: center;
-      transition: transform 0.6s;
+      transition: transform 0.5s;
       transform-style: preserve-3d;
       border-radius: 1rem;
     }
@@ -53,11 +81,13 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       border-radius: 1rem;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
+      flex-direction: column;
     }
     
     .flip-card-front {
@@ -71,63 +101,16 @@
       transform: rotateY(180deg);
     }
     
+    /* Badges y elementos UI */
     .badge-pill {
       display: inline-flex;
       align-items: center;
       gap: 0.25rem;
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-    }
-    
-    .quiz-option {
-      transition: all 0.3s ease;
-      border: 3px solid transparent;
-    }
-    
-    .quiz-option:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    
-    .quiz-option.correct {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.15);
-      animation: pulse-green 0.5s ease;
-    }
-    
-    .quiz-option.incorrect {
-      border-color: #ef4444;
-      background: rgba(239, 68, 68, 0.15);
-      animation: shake 0.5s ease;
-    }
-    
-    @keyframes pulse-green {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-    }
-    
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
-    }
-    
-    #safetyCanvas {
-      border-radius: 1rem;
-      cursor: crosshair;
-      touch-action: none;
-    }
-    
-    .nav-btn {
-      transition: all 0.3s ease;
-    }
-    
-    .nav-btn:hover {
-      transform: scale(1.05);
-      filter: brightness(1.1);
     }
     
     .section-badge {
@@ -154,29 +137,103 @@
       font-size: 0.875rem;
       flex-shrink: 0;
     }
+    
+    /* Quiz styles */
+    .quiz-option {
+      transition: all 0.25s ease;
+      border: 3px solid transparent;
+    }
+    
+    .quiz-option:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    
+    .quiz-option.correct {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+    
+    .quiz-option.incorrect {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+    }
+    
+    .quiz-option:disabled {
+      opacity: 0.85;
+      cursor: not-allowed;
+    }
+    
+    /* Canvas container */
+    .chart-container {
+      position: relative;
+      height: 240px;
+      width: 100%;
+    }
+    
+    /* Botones de navegación */
+    .nav-btn {
+      transition: all 0.25s ease;
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+    
+    /* Animaciones de entrada */
+    .fade-in-up {
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Toast notification */
+    .toast {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .toast.hidden {
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+    }
+    
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
 <body class="text-slate-800">
 
-<!-- 🔗 BARRA DE NAVEGACIÓN (RUTAS RELATIVAS) -->
+<!-- 🔗 BARRA DE NAVEGACIÓN -->
 <div class="max-w-6xl mx-auto px-4 pt-4 flex flex-wrap justify-end gap-3">
-  <a href="../../../index.html" class="nav-btn bg-slate-800/80 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm text-sm font-semibold">
+  <a href="../../../index.html" class="nav-btn bg-slate-800/90 text-white px-4 py-2.5 rounded-xl shadow-lg backdrop-blur-sm text-sm font-semibold">
     ⬅ Inicio (Grado 5°)
   </a>
-  <a href="../../index.html" class="nav-btn bg-purple-600 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl text-sm font-semibold">
+  <a href="../../index.html" class="nav-btn bg-purple-600 text-white px-4 py-2.5 rounded-xl shadow-lg text-sm font-semibold">
     ⬅ Menú Periodo 4
   </a>
-  <button type="button" onclick="copiarEnlace()" class="nav-btn bg-emerald-500 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl text-sm font-semibold">
+  <button type="button" onclick="copiarEnlace()" class="nav-btn bg-emerald-500 text-white px-4 py-2.5 rounded-xl shadow-lg text-sm font-semibold">
     🔗 Copiar enlace
   </button>
 </div>
 
-<div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/90 text-white px-5 py-3 rounded-xl shadow-2xl backdrop-blur-md z-50 font-medium">
+<!-- Toast Notification -->
+<div id="toastCopiado" class="toast hidden fixed top-6 right-6 bg-slate-900/95 text-white px-5 py-3 rounded-xl shadow-2xl backdrop-blur-md z-50 font-medium border border-white/20">
   ✨ Enlace copiado al portapapeles
 </div>
 
-<!-- 🎯 SECCIÓN 1: HERO -->
-<header class="max-w-6xl mx-auto px-4 py-6">
+<!-- 🎯 HERO SECTION -->
+<header class="max-w-6xl mx-auto px-4 py-6 fade-in-up" style="animation-delay: 0.1s">
   <div class="glass-card rounded-3xl p-6 md:p-8 text-center">
     <div class="flex flex-wrap justify-center gap-2 mb-4">
       <span class="badge-pill bg-blue-100 text-blue-700">🎨 Diapositivas</span>
@@ -200,11 +257,11 @@
   </div>
 </header>
 
-<!-- 📚 CONTENIDO PRINCIPAL -->
+<!-- 📚 MAIN CONTENT -->
 <main class="max-w-6xl mx-auto px-4 pb-12 space-y-8">
 
   <!-- 📝 COPIAR AL CUADERNO -->
-  <section class="glass-card rounded-3xl p-6 md:p-7">
+  <section class="glass-card rounded-3xl p-6 md:p-7 fade-in-up" style="animation-delay: 0.2s">
     <span class="section-badge bg-amber-100 text-amber-800">📝 Copiar al Cuaderno</span>
     
     <div class="grid md:grid-cols-2 gap-6">
@@ -250,57 +307,57 @@
   </section>
 
   <!-- 💻 INTERACTUAR EN EL PC -->
-  <section class="glass-card rounded-3xl p-6 md:p-7">
+  <section class="glass-card rounded-3xl p-6 md:p-7 fade-in-up" style="animation-delay: 0.3s">
     <span class="section-badge bg-cyan-100 text-cyan-800">💻 Interactuar en el PC</span>
     
     <div class="grid lg:grid-cols-2 gap-8">
-      <!-- Flip Cards: Tipos de Diapositivas -->
+      <!-- Flip Cards -->
       <div>
         <h3 class="text-lg font-bold text-purple-700 mb-4">🎴 Toca las tarjetas para descubrir</h3>
         <div class="grid grid-cols-2 gap-4">
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card" onclick="toggleFlip(this)">
             <div class="flip-card-inner">
-              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+              <div class="flip-card-front">
                 <span class="text-4xl mb-2">📝</span>
                 <span class="font-bold text-sm">Diapositiva de Título</span>
               </div>
-              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+              <div class="flip-card-back">
                 <p class="text-xs font-medium">Sirve para presentar el tema principal de tu presentación. ¡Es la portada!</p>
               </div>
             </div>
           </div>
           
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card" onclick="toggleFlip(this)">
             <div class="flip-card-inner">
-              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+              <div class="flip-card-front">
                 <span class="text-4xl mb-2">📄</span>
                 <span class="font-bold text-sm">Diapositiva de Contenido</span>
               </div>
-              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+              <div class="flip-card-back">
                 <p class="text-xs font-medium">Aquí explicas tus ideas con listas, párrafos o puntos clave.</p>
               </div>
             </div>
           </div>
           
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card" onclick="toggleFlip(this)">
             <div class="flip-card-inner">
-              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+              <div class="flip-card-front">
                 <span class="text-4xl mb-2">🖼️</span>
                 <span class="font-bold text-sm">Diapositiva de Imagen</span>
               </div>
-              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+              <div class="flip-card-back">
                 <p class="text-xs font-medium">Muestra fotos, dibujos o gráficos para hacer tu presentación más atractiva.</p>
               </div>
             </div>
           </div>
           
-          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card" onclick="toggleFlip(this)">
             <div class="flip-card-inner">
-              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+              <div class="flip-card-front">
                 <span class="text-4xl mb-2">✅</span>
                 <span class="font-bold text-sm">Diapositiva de Cierre</span>
               </div>
-              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+              <div class="flip-card-back">
                 <p class="text-xs font-medium">Despide a tu audiencia o resume lo más importante. ¡El final perfecto!</p>
               </div>
             </div>
@@ -309,21 +366,23 @@
         <p class="text-xs text-slate-500 mt-3 text-center">👆 ¡Haz clic en cada tarjeta para voltearla!</p>
       </div>
       
-      <!-- Chart.js: Seguridad en el Colegio -->
+      <!-- Chart.js -->
       <div>
         <h3 class="text-lg font-bold text-orange-700 mb-4">📊 Acciones: ¿Seguras o Peligrosas?</h3>
-        <canvas id="safetyChart" class="w-full" height="220"></canvas>
-        <div class="flex justify-center gap-3 mt-4">
-          <button onclick="updateChart('colegio')" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition shadow">🏫 Colegio</button>
-          <button onclick="updateChart('casa')" class="px-4 py-2 bg-pink-500 text-white rounded-lg text-sm font-semibold hover:bg-pink-600 transition shadow">🏠 Casa</button>
-          <button onclick="updateChart('calle')" class="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-semibold hover:bg-emerald-600 transition shadow">🚦 Calle</button>
+        <div class="chart-container">
+          <canvas id="safetyChart"></canvas>
+        </div>
+        <div class="flex justify-center gap-2 mt-4 flex-wrap">
+          <button onclick="updateChart('colegio')" class="px-3 py-2 bg-blue-500 text-white rounded-lg text-xs font-semibold hover:bg-blue-600 transition shadow">🏫 Colegio</button>
+          <button onclick="updateChart('casa')" class="px-3 py-2 bg-pink-500 text-white rounded-lg text-xs font-semibold hover:bg-pink-600 transition shadow">🏠 Casa</button>
+          <button onclick="updateChart('calle')" class="px-3 py-2 bg-emerald-500 text-white rounded-lg text-xs font-semibold hover:bg-emerald-600 transition shadow">🚦 Calle</button>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 🖥️ TRABAJO EN LA SALA -->
-  <section class="glass-card rounded-3xl p-6 md:p-7">
+  <section class="glass-card rounded-3xl p-6 md:p-7 fade-in-up" style="animation-delay: 0.4s">
     <span class="section-badge bg-emerald-100 text-emerald-800">🖥️ Trabajo en la Sala</span>
     
     <h3 class="text-xl font-bold text-slate-800 mb-5">🤖 Actividad: Mi Tabla con IA + Excel</h3>
@@ -404,7 +463,7 @@
   </section>
 
   <!-- 🔍 INVESTIGACIÓN -->
-  <section class="glass-card rounded-3xl p-6 md:p-7">
+  <section class="glass-card rounded-3xl p-6 md:p-7 fade-in-up" style="animation-delay: 0.5s">
     <span class="section-badge bg-rose-100 text-rose-800">🔍 Investigación</span>
     
     <div class="flex items-start gap-4">
@@ -427,7 +486,7 @@
   </section>
 
   <!-- 📄 TAREA EN HOJA SUELTA -->
-  <section class="glass-card rounded-3xl p-6 md:p-7 border-2 border-dashed border-slate-300">
+  <section class="glass-card rounded-3xl p-6 md:p-7 border-2 border-dashed border-slate-300 fade-in-up" style="animation-delay: 0.6s">
     <span class="section-badge bg-slate-100 text-slate-800">📄 Tarea en Hoja Suelta</span>
     
     <div class="flex flex-col md:flex-row items-center gap-6">
@@ -453,63 +512,63 @@
         </ol>
       </div>
       
-      <div class="flex-shrink-0">
-        <div class="text-6xl animate-pulse">⬅️</div>
+      <div class="flex-shrink-0 text-center">
+        <div class="text-5xl animate-pulse-slow">⬅️</div>
         <p class="text-center text-xs text-slate-500 mt-2">La investigación va aquí</p>
       </div>
     </div>
   </section>
 
-  <!-- 🎮 GAMIFICACIÓN: QUIZ INTERACTIVO -->
-  <section class="glass-card rounded-3xl p-6 md:p-7">
+  <!-- 🎮 QUIZ INTERACTIVO -->
+  <section class="glass-card rounded-3xl p-6 md:p-7 fade-in-up" style="animation-delay: 0.7s">
     <span class="section-badge bg-violet-100 text-violet-800">🎮 ¡Pon a Prueba tu Saber!</span>
     
     <h3 class="text-xl font-bold text-slate-800 mb-5 text-center">✨ Mini-Quiz: Diapositivas + Seguridad</h3>
     
     <div id="quiz-container" class="space-y-6">
       <!-- Pregunta 1 -->
-      <div class="quiz-question">
+      <div class="quiz-question" data-question="1">
         <p class="font-semibold text-slate-800 mb-3">1️⃣ ¿Para qué sirve una diapositiva de título?</p>
         <div class="space-y-2">
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 1)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 1)">
             A) Para mostrar muchas fotos juntas
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 1)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, true, 1)">
             B) Para presentar el tema principal de la presentación ✅
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 1)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 1)">
             C) Para despedirse al final
           </button>
         </div>
       </div>
       
       <!-- Pregunta 2 -->
-      <div class="quiz-question">
+      <div class="quiz-question" data-question="2">
         <p class="font-semibold text-slate-800 mb-3">2️⃣ ¿Cuál es una regla de seguridad en el colegio?</p>
         <div class="space-y-2">
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 2)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 2)">
             A) Correr en los pasillos para llegar rápido
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 2)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 2)">
             B) Tocar los enchufes para ver si funcionan
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 2)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, true, 2)">
             C) Caminar con cuidado y avisar si hay algo roto ✅
           </button>
         </div>
       </div>
       
       <!-- Pregunta 3 -->
-      <div class="quiz-question">
+      <div class="quiz-question" data-question="3">
         <p class="font-semibold text-slate-800 mb-3">3️⃣ Si en Excel ves "#¡VALOR!", ¿qué puede estar pasando?</p>
         <div class="space-y-2">
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 3)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, true, 3)">
             A) La fórmula tiene un error, revisa que empiece con = ✅
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 3)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 3)">
             B) El computador se dañó para siempre
           </button>
-          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 3)">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition text-sm" onclick="checkAnswer(this, false, 3)">
             C) Es un mensaje secreto de la IA
           </button>
         </div>
@@ -522,7 +581,7 @@
     </div>
     
     <div class="text-center mt-6">
-      <button onclick="showResult()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105">
+      <button onclick="showResult()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105 text-sm">
         🏆 Ver mi Resultado
       </button>
     </div>
@@ -538,80 +597,143 @@
   <p class="text-slate-400 text-xs mt-2">Colegio Santa Mariana de Jesús • Buga, Valle del Cauca</p>
 </footer>
 
-<!-- 🧠 JAVASCRIPT: LÓGICA INTERACTIVA -->
+<!-- 🧠 JAVASCRIPT -->
 <script>
-  // 🔗 Función para copiar enlace (OBLIGATORIA)
+  // ============================================
+  // FUNCIONES GLOBALES - INICIALIZACIÓN SEGURA
+  // ============================================
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    initCopyButton();
+    initFlipCards();
+    initChart();
+    initQuiz();
+    initAnimations();
+  });
+
+  // 🔗 Función para copiar enlace
   function copiarEnlace(){
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-      const t = document.getElementById('toastCopiado');
-      if(t){
-        t.classList.remove('hidden');
-        setTimeout(()=> t.classList.add('hidden'), 2000);
-      } else {
-        alert("Enlace copiado ✅");
-      }
-    }).catch(() => {
-      alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+    if(navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast();
+      }).catch(showToastFallback);
+    } else {
+      showToastFallback();
+    }
+  }
+  
+  function initCopyButton() {
+    // Verificar que el toast existe
+    const toast = document.getElementById('toastCopiado');
+    if(toast) {
+      toast.classList.add('hidden');
+    }
+  }
+  
+  function showToast() {
+    const toast = document.getElementById('toastCopiado');
+    if(toast) {
+      toast.classList.remove('hidden');
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.classList.add('hidden'), 300);
+      }, 2000);
+    } else {
+      alert("✨ Enlace copiado al portapapeles");
+    }
+  }
+  
+  function showToastFallback() {
+    alert("No se pudo copiar automáticamente. Selecciona y copia el enlace desde la barra del navegador.");
+  }
+
+  // 🎴 Flip Cards - Función separada para mejor compatibilidad
+  function toggleFlip(card) {
+    if(card && card.classList) {
+      card.classList.toggle('flipped');
+    }
+  }
+  
+  function initFlipCards() {
+    // Añadir evento click a todas las flip cards
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleFlip(this);
+      });
     });
   }
 
-  // 📊 Chart.js: Gráfico de Seguridad
-  const ctx = document.getElementById('safetyChart').getContext('2d');
-  let safetyChart;
+  // 📊 Chart.js Configuration
+  let safetyChart = null;
   
   const chartData = {
     colegio: {
-      labels: ['Caminar', 'Correr', 'Avisar peligro', 'Tocar cables', 'Ordenar'],
-      safe: [95, 20, 90, 10, 85],
+      labels: ['Caminar', 'Correr', 'Avisar', 'Cables', 'Orden'],
+      data: [95, 20, 90, 10, 85],
       colors: ['#10b981', '#ef4444', '#10b981', '#ef4444', '#10b981']
     },
     casa: {
-      labels: ['Usar cuchillo', 'Jugar fuego', 'Ayudar mamá', 'Correr mojado', 'Guardar juguetes'],
-      safe: [40, 5, 95, 15, 90],
+      labels: ['Cuchillo', 'Fuego', 'Ayudar', 'Mojado', 'Guardar'],
+      data: [40, 5, 95, 15, 90],
       colors: ['#f59e0b', '#ef4444', '#10b981', '#ef4444', '#10b981']
     },
     calle: {
-      labels: ['Cruzar en cebra', 'Correr a la vía', 'Usar casco bici', 'Jugar pelota en calle', 'Mirar antes de cruzar'],
-      safe: [90, 10, 95, 20, 85],
+      labels: ['Cebra', 'Vía', 'Casco', 'Pelota', 'Mirar'],
+      data: [90, 10, 95, 20, 85],
       colors: ['#10b981', '#ef4444', '#10b981', '#f59e0b', '#10b981']
     }
   };
 
   function createChart(dataKey) {
+    const canvas = document.getElementById('safetyChart');
+    if(!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
     const data = chartData[dataKey];
-    if(safetyChart) safetyChart.destroy();
+    
+    // Destruir chart anterior si existe
+    if(safetyChart) {
+      safetyChart.destroy();
+    }
     
     safetyChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: data.labels,
         datasets: [{
-          label: 'Nivel de Seguridad (%)',
-          data: data.safe,
+          label: 'Seguridad %',
+          data: data.data,
           backgroundColor: data.colors,
-          borderColor: data.colors.map(c => c.replace('0.', '0.')),
+          borderColor: data.colors.map(c => c),
           borderWidth: 2,
-          borderRadius: 8,
+          borderRadius: 6,
           borderSkipped: false
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: { duration: 800, easing: 'easeOutQuart' },
+        animation: { 
+          duration: 600, 
+          easing: 'easeOutQuart' 
+        },
         plugins: {
           legend: { display: false },
           tooltip: {
             backgroundColor: 'rgba(30,41,59,0.95)',
             titleColor: '#fff',
             bodyColor: '#e2e8f0',
-            padding: 12,
+            padding: 10,
             displayColors: false,
             callbacks: {
               label: function(context) {
                 const val = context.parsed.y;
-                return val >= 70 ? '✅ ¡Muy seguro!' : val >= 40 ? '⚠️ Ten cuidado' : '❌ ¡Peligroso!';
+                if(val >= 70) return '✅ ¡Muy seguro!';
+                if(val >= 40) return '⚠️ Ten cuidado';
+                return '❌ ¡Peligroso!';
               }
             }
           }
@@ -621,11 +743,14 @@
             beginAtZero: true,
             max: 100,
             grid: { color: 'rgba(0,0,0,0.05)' },
-            ticks: { callback: value => value + '%' }
+            ticks: { 
+              callback: function(value) { return value + '%'; },
+              font: { size: 10 }
+            }
           },
           x: {
             grid: { display: false },
-            ticks: { font: { size: 10 } }
+            ticks: { font: { size: 9 } }
           }
         }
       }
@@ -633,20 +758,31 @@
   }
 
   function updateChart(key) {
-    createChart(key);
+    if(chartData[key]) {
+      createChart(key);
+    }
+  }
+  
+  function initChart() {
+    // Esperar un poco para asegurar que el canvas esté renderizado
+    setTimeout(() => {
+      createChart('colegio');
+    }, 100);
   }
 
-  // Inicializar gráfico
-  createChart('colegio');
-
-  // 🎮 Quiz Interactivo
-  let answers = {1: null, 2: null, 3: null};
+  // 🎮 Quiz Logic
+  const quizAnswers = {};
+  let quizCompleted = false;
   
   function checkAnswer(btn, isCorrect, questionNum) {
-    // Resetear opciones de esta pregunta
-    const options = btn.parentElement.querySelectorAll('.quiz-option');
+    if(quizCompleted) return;
+    
+    const questionDiv = btn.closest('.quiz-question');
+    if(!questionDiv) return;
+    
+    // Deshabilitar todos los botones de esta pregunta
+    const options = questionDiv.querySelectorAll('.quiz-option');
     options.forEach(opt => {
-      opt.classList.remove('correct', 'incorrect');
       opt.disabled = true;
       opt.style.cursor = 'not-allowed';
     });
@@ -654,11 +790,11 @@
     // Marcar respuesta
     if(isCorrect) {
       btn.classList.add('correct');
-      answers[questionNum] = true;
+      quizAnswers[questionNum] = true;
     } else {
       btn.classList.add('incorrect');
-      answers[questionNum] = false;
-      // Mostrar la correcta
+      quizAnswers[questionNum] = false;
+      // Resaltar la correcta
       options.forEach(opt => {
         if(opt.textContent.includes('✅')) {
           opt.classList.add('correct');
@@ -668,56 +804,100 @@
   }
   
   function showResult() {
-    const total = Object.values(answers).filter(a => a === true).length;
+    quizCompleted = true;
+    
+    // Contar respuestas correctas
+    const answered = Object.keys(quizAnswers).length;
+    const correct = Object.values(quizAnswers).filter(a => a === true).length;
+    
     const resultDiv = document.getElementById('quiz-result');
     const msg = document.getElementById('result-message');
     const feedback = document.getElementById('result-feedback');
     
-    resultDiv.classList.remove('hidden');
-    resultDiv.className = 'mt-6 p-5 rounded-2xl text-center ' + 
-      (total === 3 ? 'bg-emerald-50 border-2 border-emerald-200' : 
-       total >= 2 ? 'bg-blue-50 border-2 border-blue-200' : 'bg-amber-50 border-2 border-amber-200');
+    if(!resultDiv || !msg || !feedback) return;
     
-    if(total === 3) {
+    resultDiv.classList.remove('hidden');
+    
+    // Estilos según resultado
+    if(correct === 3) {
+      resultDiv.className = 'mt-6 p-5 rounded-2xl text-center bg-emerald-50 border-2 border-emerald-200';
       msg.textContent = '🌟 ¡Excelente! 3/3 correctas';
       msg.className = 'text-lg font-bold text-emerald-700';
       feedback.textContent = '¡Eres un experto en diapositivas y seguridad! 🦸✨';
-    } else if(total >= 2) {
-      msg.textContent = `👍 ¡Muy bien! ${total}/3 correctas`;
+    } else if(correct >= 2) {
+      resultDiv.className = 'mt-6 p-5 rounded-2xl text-center bg-blue-50 border-2 border-blue-200';
+      msg.textContent = `👍 ¡Muy bien! ${correct}/3 correctas`;
       msg.className = 'text-lg font-bold text-blue-700';
-      feedback.textContent = 'Casi perfecto. Repasa las reglas de seguridad y ¡a la próxima será 3/3! 💪';
-    } else {
-      msg.textContent = `💪 ¡Tú puedes! ${total}/3 correctas`;
+      feedback.textContent = 'Casi perfecto. Repasa y ¡a la próxima será 3/3! 💪';
+    } else if(correct >= 1) {
+      resultDiv.className = 'mt-6 p-5 rounded-2xl text-center bg-amber-50 border-2 border-amber-200';
+      msg.textContent = `💪 ¡Tú puedes! ${correct}/3 correctas`;
       msg.className = 'text-lg font-bold text-amber-700';
-      feedback.textContent = 'Revisa las tarjetas interactivas y vuelve a intentar. ¡La práctica hace al maestro! 🎯';
+      feedback.textContent = 'Revisa las tarjetas interactivas e inténtalo de nuevo. 🎯';
+    } else {
+      resultDiv.className = 'mt-6 p-5 rounded-2xl text-center bg-rose-50 border-2 border-rose-200';
+      msg.textContent = `📚 A practicar: ${correct}/3 correctas`;
+      msg.className = 'text-lg font-bold text-rose-700';
+      feedback.textContent = 'Lee nuevamente la sección "Copiar al Cuaderno" y vuelve a intentar. ✨';
     }
     
-    // Scroll suave al resultado
+    // Scroll suave
     resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
+  
+  function initQuiz() {
+    // Resetear estado del quiz
+    quizCompleted = false;
+    Object.keys(quizAnswers).forEach(key => delete quizAnswers[key]);
+    
+    // Resetear estilos de opciones
+    document.querySelectorAll('.quiz-option').forEach(btn => {
+      btn.classList.remove('correct', 'incorrect');
+      btn.disabled = false;
+      btn.style.cursor = 'pointer';
+    });
+    
+    // Ocultar resultado
+    const resultDiv = document.getElementById('quiz-result');
+    if(resultDiv) resultDiv.classList.add('hidden');
+  }
 
-  // ✨ Efecto hover suave en todas las tarjetas
-  document.querySelectorAll('.glass-card, .flip-card, .quiz-option, .nav-btn').forEach(el => {
-    el.addEventListener('mouseenter', function() {
-      this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+  // ✨ Animaciones de entrada
+  function initAnimations() {
+    const elements = document.querySelectorAll('.fade-in-up');
+    elements.forEach((el, index) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(15px)';
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      
+      setTimeout(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, 150 * index);
+    });
+  }
+
+  // 🎨 Efectos hover adicionales
+  document.addEventListener('DOMContentLoaded', function() {
+    // Añadir efecto hover a botones de navegación
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-2px)';
+      });
+      btn.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
     });
   });
 
-  // 🎨 Animación de entrada para secciones
-  document.addEventListener('DOMContentLoaded', function() {
-    const sections = document.querySelectorAll('section');
-    sections.forEach((section, index) => {
-      section.style.opacity = '0';
-      section.style.transform = 'translateY(20px)';
-      section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      
-      setTimeout(() => {
-        section.style.opacity = '1';
-        section.style.transform = 'translateY(0)';
-      }, 200 * index);
-    });
+  // 🛡️ Manejo de errores global para debugging
+  window.addEventListener('error', function(e) {
+    console.warn('⚠️ Error capturado:', e.message);
+    // No interrumpir la experiencia del usuario
+    return true;
   });
 </script>
 
 </body>
+</html>
 </html>
