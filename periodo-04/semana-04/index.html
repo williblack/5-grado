@@ -1,1 +1,723 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 Diapositivas + 🦺 Seguridad Industrial | Grado 5°</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+    
+    body { 
+      font-family: 'Nunito', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+    
+    .glass-dark {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .flip-card {
+      perspective: 1000px;
+      height: 200px;
+      cursor: pointer;
+    }
+    
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      border-radius: 1rem;
+    }
+    
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .flip-card-front {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+    
+    .flip-card-back {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: white;
+      transform: rotateY(180deg);
+    }
+    
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .quiz-option {
+      transition: all 0.3s ease;
+      border: 3px solid transparent;
+    }
+    
+    .quiz-option:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .quiz-option.correct {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      animation: pulse-green 0.5s ease;
+    }
+    
+    .quiz-option.incorrect {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      animation: shake 0.5s ease;
+    }
+    
+    @keyframes pulse-green {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    #safetyCanvas {
+      border-radius: 1rem;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    
+    .nav-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-btn:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+    
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      margin-bottom: 1rem;
+    }
+    
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      font-weight: 800;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="text-slate-800">
+
+<!-- 🔗 BARRA DE NAVEGACIÓN (RUTAS RELATIVAS) -->
+<div class="max-w-6xl mx-auto px-4 pt-4 flex flex-wrap justify-end gap-3">
+  <a href="../../../index.html" class="nav-btn bg-slate-800/80 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl backdrop-blur-sm text-sm font-semibold">
+    ⬅ Inicio (Grado 5°)
+  </a>
+  <a href="../../index.html" class="nav-btn bg-purple-600 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl text-sm font-semibold">
+    ⬅ Menú Periodo 4
+  </a>
+  <button type="button" onclick="copiarEnlace()" class="nav-btn bg-emerald-500 text-white px-4 py-2.5 rounded-xl shadow-lg hover:shadow-xl text-sm font-semibold">
+    🔗 Copiar enlace
+  </button>
+</div>
+
+<div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/90 text-white px-5 py-3 rounded-xl shadow-2xl backdrop-blur-md z-50 font-medium">
+  ✨ Enlace copiado al portapapeles
+</div>
+
+<!-- 🎯 SECCIÓN 1: HERO -->
+<header class="max-w-6xl mx-auto px-4 py-6">
+  <div class="glass-card rounded-3xl p-6 md:p-8 text-center">
+    <div class="flex flex-wrap justify-center gap-2 mb-4">
+      <span class="badge-pill bg-blue-100 text-blue-700">🎨 Diapositivas</span>
+      <span class="badge-pill bg-orange-100 text-orange-700">🦺 Seguridad</span>
+      <span class="badge-pill bg-purple-100 text-purple-700">Grado 5°</span>
+    </div>
+    
+    <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent mb-3">
+      ¿Qué es una Diapositiva? + Seguridad Industrial
+    </h1>
+    
+    <p class="text-slate-600 font-medium mb-2">Colegio Santa Mariana de Jesús • Buga</p>
+    <p class="text-slate-500 text-sm">Prof. William Fdo Bernal • Área de Tecnología</p>
+    
+    <div class="mt-6 glass-dark rounded-2xl p-5 max-w-3xl mx-auto">
+      <h3 class="text-white font-bold text-lg mb-2">🎯 Objetivo de Hoy</h3>
+      <p class="text-slate-200 text-sm md:text-base">
+        Aprenderé qué son las diapositivas y sus tipos, y conoceré reglas de seguridad para cuidarme en el colegio, casa y otros lugares. ¡Todo de forma divertida! 🌟
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- 📚 CONTENIDO PRINCIPAL -->
+<main class="max-w-6xl mx-auto px-4 pb-12 space-y-8">
+
+  <!-- 📝 COPIAR AL CUADERNO -->
+  <section class="glass-card rounded-3xl p-6 md:p-7">
+    <span class="section-badge bg-amber-100 text-amber-800">📝 Copiar al Cuaderno</span>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-purple-700 mb-3 flex items-center gap-2">
+          <span class="text-2xl">🖼️</span> ¿Qué es una Diapositiva?
+        </h3>
+        <div class="space-y-3 text-sm">
+          <p>✨ Una <strong>diapositiva</strong> es como una "hoja mágica" en la computadora donde ponemos letras, imágenes y colores para contar una historia o explicar un tema.</p>
+          <p>🧩 <strong>Tipos básicos:</strong></p>
+          <ul class="space-y-2 pl-4">
+            <li>📝 <strong>Título:</strong> Presenta el tema (ej: "Los Animales")</li>
+            <li>📄 <strong>Contenido:</strong> Explica ideas con texto</li>
+            <li>🖼️ <strong>Imagen:</strong> Muestra fotos o dibujos</li>
+            <li>✅ <strong>Cierre:</strong> Despide o resume ("¡Gracias!")</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold text-orange-700 mb-3 flex items-center gap-2">
+          <span class="text-2xl">🦺</span> Seguridad Industrial
+        </h3>
+        <div class="space-y-3 text-sm">
+          <p>🛡️ La <strong>seguridad industrial</strong> son reglas para trabajar, estudiar o jugar <em>sin lastimarnos</em>. ¡Es como usar el cinturón en el carro!</p>
+          <p>✅ <strong>Reglas de oro para niños:</strong></p>
+          <ul class="space-y-2 pl-4">
+            <li>🚶 Caminar, no correr en pasillos</li>
+            <li>👟 Usar zapatos cerrados en educación física</li>
+            <li>🔌 No tocar cables o enchufes sin permiso</li>
+            <li>🧹 Mantener el salón ordenado</li>
+            <li>🗣️ Avisar al profe si hay algo peligroso</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-l-4 border-purple-400">
+      <p class="text-sm font-medium text-slate-700">
+        💡 <strong>Conexión con la Semana 3:</strong> Así como aprendimos a <em>hablar en público</em>, ahora usaremos <strong>diapositivas</strong> para organizar nuestras ideas y presentarlas de forma clara y segura. 🎤✨
+      </p>
+    </div>
+  </section>
+
+  <!-- 💻 INTERACTUAR EN EL PC -->
+  <section class="glass-card rounded-3xl p-6 md:p-7">
+    <span class="section-badge bg-cyan-100 text-cyan-800">💻 Interactuar en el PC</span>
+    
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Flip Cards: Tipos de Diapositivas -->
+      <div>
+        <h3 class="text-lg font-bold text-purple-700 mb-4">🎴 Toca las tarjetas para descubrir</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+                <span class="text-4xl mb-2">📝</span>
+                <span class="font-bold text-sm">Diapositiva de Título</span>
+              </div>
+              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+                <p class="text-xs font-medium">Sirve para presentar el tema principal de tu presentación. ¡Es la portada!</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+                <span class="text-4xl mb-2">📄</span>
+                <span class="font-bold text-sm">Diapositiva de Contenido</span>
+              </div>
+              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+                <p class="text-xs font-medium">Aquí explicas tus ideas con listas, párrafos o puntos clave.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+                <span class="text-4xl mb-2">🖼️</span>
+                <span class="font-bold text-sm">Diapositiva de Imagen</span>
+              </div>
+              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+                <p class="text-xs font-medium">Muestra fotos, dibujos o gráficos para hacer tu presentación más atractiva.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front flex flex-col items-center justify-center p-3">
+                <span class="text-4xl mb-2">✅</span>
+                <span class="font-bold text-sm">Diapositiva de Cierre</span>
+              </div>
+              <div class="flip-card-back flex flex-col items-center justify-center p-3">
+                <p class="text-xs font-medium">Despide a tu audiencia o resume lo más importante. ¡El final perfecto!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mt-3 text-center">👆 ¡Haz clic en cada tarjeta para voltearla!</p>
+      </div>
+      
+      <!-- Chart.js: Seguridad en el Colegio -->
+      <div>
+        <h3 class="text-lg font-bold text-orange-700 mb-4">📊 Acciones: ¿Seguras o Peligrosas?</h3>
+        <canvas id="safetyChart" class="w-full" height="220"></canvas>
+        <div class="flex justify-center gap-3 mt-4">
+          <button onclick="updateChart('colegio')" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition shadow">🏫 Colegio</button>
+          <button onclick="updateChart('casa')" class="px-4 py-2 bg-pink-500 text-white rounded-lg text-sm font-semibold hover:bg-pink-600 transition shadow">🏠 Casa</button>
+          <button onclick="updateChart('calle')" class="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-semibold hover:bg-emerald-600 transition shadow">🚦 Calle</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🖥️ TRABAJO EN LA SALA -->
+  <section class="glass-card rounded-3xl p-6 md:p-7">
+    <span class="section-badge bg-emerald-100 text-emerald-800">🖥️ Trabajo en la Sala</span>
+    
+    <h3 class="text-xl font-bold text-slate-800 mb-5">🤖 Actividad: Mi Tabla con IA + Excel</h3>
+    
+    <div class="space-y-4">
+      <div class="flex gap-4 items-start">
+        <span class="step-number bg-purple-600 text-white">1</span>
+        <div class="flex-1">
+          <p class="font-semibold text-slate-800 mb-1">Genera los datos con IA</p>
+          <p class="text-sm text-slate-600 mb-2">Abre tu asistente de IA y pega este prompt exacto:</p>
+          <div class="glass-dark rounded-xl p-4 text-xs text-slate-200 font-mono overflow-x-auto">
+            "Crea una tabla para estudiantes de grado 5 sobre diapositivas y seguridad industrial. La tabla debe tener exactamente 5 columnas con estos encabezados: Elemento, Tipo, Funcion, Cantidad, Riesgo. Usa ejemplos sencillos relacionados con presentaciones en PowerPoint y seguridad industrial en el colegio. La columna Elemento debe tener nombres únicos. La columna Tipo debe decir si es Diapositiva o Seguridad. La columna Funcion debe explicar para qué sirve. La columna Cantidad debe tener números pequeños entre 1 y 10. La columna Riesgo debe tener palabras como Bajo, Medio o Alto. Entrega SOLO la tabla en formato TSV con exactamente 10 filas de datos más 1 fila de encabezados, sin explicaciones, sin markdown, sin código, sin comillas. Usa tabulaciones reales como separador."
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4 items-start">
+        <span class="step-number bg-purple-600 text-white">2</span>
+        <div class="flex-1">
+          <p class="font-semibold text-slate-800 mb-1">Pega en Excel y da formato</p>
+          <ul class="text-sm text-slate-600 space-y-1 pl-2">
+            <li>• Copia el resultado de la IA y pégalo en la celda <strong>A1</strong> de Excel</li>
+            <li>• Selecciona de <strong>A1 a E11</strong> → Pon encabezados en <strong>negrita</strong> (Ctrl+N)</li>
+            <li>• Centra las columnas: Elemento, Tipo, Cantidad, Riesgo</li>
+            <li>• Aplica <strong>bordes</strong> a toda la tabla y colores a la fila de títulos</li>
+            <li>• Usa color diferente para la columna <strong>Riesgo</strong> (🟢Bajo, 🟡Medio, 🔴Alto)</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="flex gap-4 items-start">
+        <span class="step-number bg-purple-600 text-white">3</span>
+        <div class="flex-1">
+          <p class="font-semibold text-slate-800 mb-1">Practica operaciones básicas</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+            <div class="glass-card rounded-xl p-3 text-center">
+              <p class="text-xs text-slate-500">En G2</p>
+              <p class="font-mono font-bold text-purple-700">=5+3</p>
+              <p class="text-xs text-slate-500">Suma</p>
+            </div>
+            <div class="glass-card rounded-xl p-3 text-center">
+              <p class="text-xs text-slate-500">En G3</p>
+              <p class="font-mono font-bold text-purple-700">=10-4</p>
+              <p class="text-xs text-slate-500">Resta</p>
+            </div>
+            <div class="glass-card rounded-xl p-3 text-center">
+              <p class="text-xs text-slate-500">En G4</p>
+              <p class="font-mono font-bold text-purple-700">=3*2</p>
+              <p class="text-xs text-slate-500">Multiplicación</p>
+            </div>
+            <div class="glass-card rounded-xl p-3 text-center">
+              <p class="text-xs text-slate-500">En G5</p>
+              <p class="font-mono font-bold text-purple-700">=8/2</p>
+              <p class="text-xs text-slate-500">División</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex gap-4 items-start">
+        <span class="step-number bg-purple-600 text-white">4</span>
+        <div class="flex-1">
+          <p class="font-semibold text-slate-800 mb-1">💾 Guarda tu archivo</p>
+          <div class="glass-dark rounded-xl p-4">
+            <p class="text-sm text-slate-200 mb-2"><strong>Nomenclatura:</strong> <code class="bg-slate-700 px-2 py-1 rounded">grado_tema_fecha(ddmmaa)_nombre.xlsx</code></p>
+            <p class="text-xs text-emerald-300 font-mono">Ejemplo: <strong>5_diapositivas_seguridad_130526_maria.xlsx</strong></p>
+            <p class="text-xs text-slate-400 mt-2">✅ Sin espacios, tildes ni caracteres especiales. ¡Termina en .xlsx!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-cyan-50 rounded-xl border-l-4 border-emerald-400">
+      <p class="text-sm font-medium text-slate-700">
+        🎯 <strong>Reto Avanzado:</strong> Cambia el color de relleno de las filas donde el <strong>Riesgo sea Alto</strong> y escribe una frase corta explicando cómo evitar ese accidente en el colegio. ¡Sé un experto en seguridad! 🦸
+      </p>
+    </div>
+  </section>
+
+  <!-- 🔍 INVESTIGACIÓN -->
+  <section class="glass-card rounded-3xl p-6 md:p-7">
+    <span class="section-badge bg-rose-100 text-rose-800">🔍 Investigación</span>
+    
+    <div class="flex items-start gap-4">
+      <div class="text-4xl">🔎</div>
+      <div class="flex-1">
+        <h3 class="text-lg font-bold text-slate-800 mb-2">Pregunta para Google</h3>
+        <p class="text-slate-700 mb-4">
+          <strong>"¿Qué es un extintor y para qué sirve en el colegio?"</strong>
+        </p>
+        <p class="text-sm text-slate-600 mb-4">
+          Busca en Google, lee 2 fuentes confiables y escribe en tu cuaderno:
+        </p>
+        <ul class="space-y-2 text-sm pl-4">
+          <li>📝 1. ¿De qué color suele ser un extintor?</li>
+          <li>📝 2. ¿En qué lugares del colegio debería haber uno?</li>
+          <li>📝 3. Dibuja un extintor pequeño al lado de tu respuesta</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📄 TAREA EN HOJA SUELTA -->
+  <section class="glass-card rounded-3xl p-6 md:p-7 border-2 border-dashed border-slate-300">
+    <span class="section-badge bg-slate-100 text-slate-800">📄 Tarea en Hoja Suelta</span>
+    
+    <div class="flex flex-col md:flex-row items-center gap-6">
+      <div class="flex-1">
+        <h3 class="text-lg font-bold text-slate-800 mb-3">📋 Instrucciones</h3>
+        <ol class="space-y-3 text-sm">
+          <li class="flex gap-3">
+            <span class="font-bold text-purple-600">①</span>
+            <span>Usa una <strong>hoja en blanco</strong> tamaño carta</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="font-bold text-purple-600">②</span>
+            <span>Escribe arriba: <strong>Nombre completo</strong> y <strong>Grado 5°</strong></span>
+          </li>
+          <li class="flex gap-3">
+            <span class="font-bold text-purple-600">③</span>
+            <span>Entrega la <strong>investigación del extintor</strong> (sección anterior) con tus 3 respuestas y el dibujo</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="font-bold text-purple-600">④</span>
+            <span>Fecha límite: <strong>Próxima clase de Tecnología</strong> 🗓️</span>
+          </li>
+        </ol>
+      </div>
+      
+      <div class="flex-shrink-0">
+        <div class="text-6xl animate-pulse">⬅️</div>
+        <p class="text-center text-xs text-slate-500 mt-2">La investigación va aquí</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎮 GAMIFICACIÓN: QUIZ INTERACTIVO -->
+  <section class="glass-card rounded-3xl p-6 md:p-7">
+    <span class="section-badge bg-violet-100 text-violet-800">🎮 ¡Pon a Prueba tu Saber!</span>
+    
+    <h3 class="text-xl font-bold text-slate-800 mb-5 text-center">✨ Mini-Quiz: Diapositivas + Seguridad</h3>
+    
+    <div id="quiz-container" class="space-y-6">
+      <!-- Pregunta 1 -->
+      <div class="quiz-question">
+        <p class="font-semibold text-slate-800 mb-3">1️⃣ ¿Para qué sirve una diapositiva de título?</p>
+        <div class="space-y-2">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 1)">
+            A) Para mostrar muchas fotos juntas
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 1)">
+            B) Para presentar el tema principal de la presentación ✅
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 1)">
+            C) Para despedirse al final
+          </button>
+        </div>
+      </div>
+      
+      <!-- Pregunta 2 -->
+      <div class="quiz-question">
+        <p class="font-semibold text-slate-800 mb-3">2️⃣ ¿Cuál es una regla de seguridad en el colegio?</p>
+        <div class="space-y-2">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 2)">
+            A) Correr en los pasillos para llegar rápido
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 2)">
+            B) Tocar los enchufes para ver si funcionan
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 2)">
+            C) Caminar con cuidado y avisar si hay algo roto ✅
+          </button>
+        </div>
+      </div>
+      
+      <!-- Pregunta 3 -->
+      <div class="quiz-question">
+        <p class="font-semibold text-slate-800 mb-3">3️⃣ Si en Excel ves "#¡VALOR!", ¿qué puede estar pasando?</p>
+        <div class="space-y-2">
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, true, 3)">
+            A) La fórmula tiene un error, revisa que empiece con = ✅
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 3)">
+            B) El computador se dañó para siempre
+          </button>
+          <button class="quiz-option w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition" onclick="checkAnswer(this, false, 3)">
+            C) Es un mensaje secreto de la IA
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div id="quiz-result" class="hidden mt-6 p-5 rounded-2xl text-center">
+      <p id="result-message" class="text-lg font-bold"></p>
+      <p id="result-feedback" class="text-sm text-slate-600 mt-2"></p>
+    </div>
+    
+    <div class="text-center mt-6">
+      <button onclick="showResult()" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition transform hover:scale-105">
+        🏆 Ver mi Resultado
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<!-- 🦶 FOOTER -->
+<footer class="glass-dark text-center py-6 mt-8">
+  <p class="text-slate-300 font-medium">
+    © 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática
+  </p>
+  <p class="text-slate-400 text-xs mt-2">Colegio Santa Mariana de Jesús • Buga, Valle del Cauca</p>
+</footer>
+
+<!-- 🧠 JAVASCRIPT: LÓGICA INTERACTIVA -->
+<script>
+  // 🔗 Función para copiar enlace (OBLIGATORIA)
+  function copiarEnlace(){
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      const t = document.getElementById('toastCopiado');
+      if(t){
+        t.classList.remove('hidden');
+        setTimeout(()=> t.classList.add('hidden'), 2000);
+      } else {
+        alert("Enlace copiado ✅");
+      }
+    }).catch(() => {
+      alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+    });
+  }
+
+  // 📊 Chart.js: Gráfico de Seguridad
+  const ctx = document.getElementById('safetyChart').getContext('2d');
+  let safetyChart;
+  
+  const chartData = {
+    colegio: {
+      labels: ['Caminar', 'Correr', 'Avisar peligro', 'Tocar cables', 'Ordenar'],
+      safe: [95, 20, 90, 10, 85],
+      colors: ['#10b981', '#ef4444', '#10b981', '#ef4444', '#10b981']
+    },
+    casa: {
+      labels: ['Usar cuchillo', 'Jugar fuego', 'Ayudar mamá', 'Correr mojado', 'Guardar juguetes'],
+      safe: [40, 5, 95, 15, 90],
+      colors: ['#f59e0b', '#ef4444', '#10b981', '#ef4444', '#10b981']
+    },
+    calle: {
+      labels: ['Cruzar en cebra', 'Correr a la vía', 'Usar casco bici', 'Jugar pelota en calle', 'Mirar antes de cruzar'],
+      safe: [90, 10, 95, 20, 85],
+      colors: ['#10b981', '#ef4444', '#10b981', '#f59e0b', '#10b981']
+    }
+  };
+
+  function createChart(dataKey) {
+    const data = chartData[dataKey];
+    if(safetyChart) safetyChart.destroy();
+    
+    safetyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Nivel de Seguridad (%)',
+          data: data.safe,
+          backgroundColor: data.colors,
+          borderColor: data.colors.map(c => c.replace('0.', '0.')),
+          borderWidth: 2,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 800, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(30,41,59,0.95)',
+            titleColor: '#fff',
+            bodyColor: '#e2e8f0',
+            padding: 12,
+            displayColors: false,
+            callbacks: {
+              label: function(context) {
+                const val = context.parsed.y;
+                return val >= 70 ? '✅ ¡Muy seguro!' : val >= 40 ? '⚠️ Ten cuidado' : '❌ ¡Peligroso!';
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            grid: { color: 'rgba(0,0,0,0.05)' },
+            ticks: { callback: value => value + '%' }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 } }
+          }
+        }
+      }
+    });
+  }
+
+  function updateChart(key) {
+    createChart(key);
+  }
+
+  // Inicializar gráfico
+  createChart('colegio');
+
+  // 🎮 Quiz Interactivo
+  let answers = {1: null, 2: null, 3: null};
+  
+  function checkAnswer(btn, isCorrect, questionNum) {
+    // Resetear opciones de esta pregunta
+    const options = btn.parentElement.querySelectorAll('.quiz-option');
+    options.forEach(opt => {
+      opt.classList.remove('correct', 'incorrect');
+      opt.disabled = true;
+      opt.style.cursor = 'not-allowed';
+    });
+    
+    // Marcar respuesta
+    if(isCorrect) {
+      btn.classList.add('correct');
+      answers[questionNum] = true;
+    } else {
+      btn.classList.add('incorrect');
+      answers[questionNum] = false;
+      // Mostrar la correcta
+      options.forEach(opt => {
+        if(opt.textContent.includes('✅')) {
+          opt.classList.add('correct');
+        }
+      });
+    }
+  }
+  
+  function showResult() {
+    const total = Object.values(answers).filter(a => a === true).length;
+    const resultDiv = document.getElementById('quiz-result');
+    const msg = document.getElementById('result-message');
+    const feedback = document.getElementById('result-feedback');
+    
+    resultDiv.classList.remove('hidden');
+    resultDiv.className = 'mt-6 p-5 rounded-2xl text-center ' + 
+      (total === 3 ? 'bg-emerald-50 border-2 border-emerald-200' : 
+       total >= 2 ? 'bg-blue-50 border-2 border-blue-200' : 'bg-amber-50 border-2 border-amber-200');
+    
+    if(total === 3) {
+      msg.textContent = '🌟 ¡Excelente! 3/3 correctas';
+      msg.className = 'text-lg font-bold text-emerald-700';
+      feedback.textContent = '¡Eres un experto en diapositivas y seguridad! 🦸✨';
+    } else if(total >= 2) {
+      msg.textContent = `👍 ¡Muy bien! ${total}/3 correctas`;
+      msg.className = 'text-lg font-bold text-blue-700';
+      feedback.textContent = 'Casi perfecto. Repasa las reglas de seguridad y ¡a la próxima será 3/3! 💪';
+    } else {
+      msg.textContent = `💪 ¡Tú puedes! ${total}/3 correctas`;
+      msg.className = 'text-lg font-bold text-amber-700';
+      feedback.textContent = 'Revisa las tarjetas interactivas y vuelve a intentar. ¡La práctica hace al maestro! 🎯';
+    }
+    
+    // Scroll suave al resultado
+    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // ✨ Efecto hover suave en todas las tarjetas
+  document.querySelectorAll('.glass-card, .flip-card, .quiz-option, .nav-btn').forEach(el => {
+    el.addEventListener('mouseenter', function() {
+      this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+  });
+
+  // 🎨 Animación de entrada para secciones
+  document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('section');
+    sections.forEach((section, index) => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+      section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      
+      setTimeout(() => {
+        section.style.opacity = '1';
+        section.style.transform = 'translateY(0)';
+      }, 200 * index);
+    });
+  });
+</script>
+
+</body>
+</html>
