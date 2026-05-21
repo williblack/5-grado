@@ -1,1 +1,671 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clase 5: ¡Organizamos una presentación sobre nuestra seguridad!</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Estilos CSS Personalizados para Efectos 3D y Animaciones -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #f0f4f8;
+    }
+    
+    h1, h2, h3, .font-title {
+      font-family: 'Fredoka One', cursive;
+    }
+
+    /* Estilos para Tarjetas 3D (Flip Cards) */
+    .flip-card {
+      background-color: transparent;
+      perspective: 1000px;
+      height: 220px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .flip-card-front {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Animación de vibración para errores en el Quiz */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: shake 0.3s ease-in-out;
+    }
+
+    /* Flecha flotante interactiva animada */
+    @keyframes bounceLeft {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-10px); }
+    }
+    .animate-bounce-left {
+      animation: bounceLeft 1.2s infinite;
+    }
+  </style>
+</head>
+<body class="text-slate-800 p-4 md:p-8 bg-gradient-to-br from-indigo-50 via-slate-100 to-emerald-50 min-h-screen">
+
+  <!-- ================================================ -->
+  <!-- 🔒 BARRA DE BOTONES OBLIGATORIA (RUTAS REPO)   -->
+  <!-- ================================================ -->
+  <div class="max-w-5xl mx-auto flex justify-end gap-3 mb-6">
+    <a href="../../../index.html"
+       class="bg-slate-800/70 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 backdrop-blur font-semibold text-sm flex items-center gap-1">
+       ⬅ Inicio (Grado)
+    </a>
+
+    <a href="../../index.html"
+       class="bg-purple-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 font-semibold text-sm flex items-center gap-1">
+       ⬅ Menú del Periodo
+    </a>
+
+    <button type="button" onclick="copiarEnlace()"
+       class="bg-emerald-600 text-white px-4 py-2 rounded-xl shadow hover:scale-105 transition-all duration-300 font-semibold text-sm flex items-center gap-1">
+       🔗 Copiar enlace
+    </button>
+  </div>
+
+  <div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/80 text-white px-4 py-3 rounded-xl shadow-lg backdrop-blur z-50 transition-all duration-300">
+    Enlace copiado ✅
+  </div>
+
+  <!-- ================================================ -->
+  <!-- SECCIÓN 1: HERO (Visual e Impactante)          -->
+  <!-- ================================================ -->
+  <header class="max-w-5xl mx-auto mb-8 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 text-white rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+    <!-- Decoraciones de fondo flotantes -->
+    <div class="absolute top-[-20%] right-[-10%] w-64 height-64 bg-white/10 rounded-full blur-2xl"></div>
+    <div class="absolute bottom-[-30%] left-[-5%] w-48 height-48 bg-emerald-400/20 rounded-full blur-xl"></div>
+    
+    <div class="relative z-10 text-center md:text-left">
+      <span class="bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+        Colegio Santa Mariana de Jesús
+      </span>
+      <h1 class="text-3xl md:text-5xl mt-3 text-white drop-shadow-md">
+        ¡Organizamos una presentación sobre nuestra seguridad!
+      </h1>
+      <p class="text-indigo-200 mt-2 font-semibold text-sm md:text-base">
+        Tecnología e Informática • Grado 5° • Periodo 4 • Semana 05
+      </p>
+      
+      <div class="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2">
+        <span class="bg-white/20 px-3 py-1 rounded-xl text-xs backdrop-blur border border-white/10 font-medium">
+          Prof. William Fdo Bernal
+        </span>
+      </div>
+    </div>
+
+    <!-- Bloque Destacado: Objetivo de Aprendizaje -->
+    <div class="mt-8 bg-white/10 backdrop-blur-md border border-white/20 p-4 md:p-5 rounded-2xl shadow-inner">
+      <div class="flex items-start gap-3">
+        <div class="bg-amber-400 text-slate-950 p-2 rounded-xl text-xl shadow">🎯</div>
+        <div>
+          <h4 class="font-bold text-amber-300 text-sm md:text-base">Nuestro Gran Objetivo:</h4>
+          <p class="text-sm text-white/90 leading-relaxed mt-1">
+            Aprenderás a usar la Inteligencia Artificial para crear datos de seguridad, organizarlos de forma súper visual en Excel usando operaciones matemáticas y ordenarlos lógicamente dentro de una gran presentación de PowerPoint.
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto space-y-10">
+
+    <!-- ================================================ -->
+    <!-- SECCIÓN 2: MÓDULOS DE APRENDIZAJE              -->
+    <!-- ================================================ -->
+    
+    <!-- BLOQUE: COPIAR AL CUADERNO -->
+    <section class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 transition-all">
+      <div class="mb-4">
+        <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase">
+          📝 COPIAR AL CUADERNO
+        </span>
+      </div>
+      
+      <div class="border-l-4 border-blue-500 pl-4 space-y-4">
+        <p class="text-xs text-slate-500 italic bg-slate-50 p-2 rounded-lg">
+          🔗 <strong>Conexión Temporal:</strong> En la <strong>Semana 4 ¡Viaje en el Tiempo!</strong> exploramos la maravillosa historia de las computadoras. ¡Hoy daremos un salto al futuro usando la Inteligencia Artificial y organizando datos sobre nuestra protección!
+        </p>
+        
+        <h3 class="text-xl text-indigo-950">¡El Tren de las Ideas y la Seguridad!</h3>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Para que una exposición sea exitosa, debe seguir un orden lógico impecable. Imagina que tu presentación es un <strong>tren de ideas</strong>:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center my-2">
+          <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+            <span class="text-xl">🚂</span>
+            <h5 class="font-bold text-blue-900 text-sm mt-1">Vagón 1: El Inicio</h5>
+            <p class="text-xs text-slate-600 mt-1">Título llamativo, tu nombre y de qué vas a hablar.</p>
+          </div>
+          <div class="bg-purple-50/50 p-3 rounded-xl border border-purple-100">
+            <span class="text-xl">📦</span>
+            <h5 class="font-bold text-purple-900 text-sm mt-1">Vagón 2: El Cuerpo</h5>
+            <p class="text-xs text-slate-600 mt-1">Normas de seguridad explicadas con datos limpios y colores.</p>
+          </div>
+          <div class="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+            <span class="text-xl">🏁</span>
+            <h5 class="font-bold text-emerald-900 text-sm mt-1">Vagón 3: El Cierre</h5>
+            <p class="text-xs text-slate-600 mt-1">Un semáforo de prioridades y conclusiones finales importantes.</p>
+          </div>
+        </div>
+
+        <p class="text-sm text-slate-600 leading-relaxed">
+          <strong>¿Qué es la Seguridad Industrial?</strong> Son las normas inteligentes aplicadas en empresas y escuelas para cuidar nuestra vida y evitar accidentes. Ejemplos rápidos: usar casco en obras o caminar sin correr por los pasillos de nuestro querido colegio.
+        </p>
+      </div>
+    </section>
+
+    <!-- BLOQUE: INTERACTUAR EN EL PC (DATA LAB + ANALOGÍAS 3D) -->
+    <section class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 space-y-8">
+      <div>
+        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase">
+          💻 INTERACTUAR EN EL PC
+        </span>
+        <h3 class="text-2xl text-slate-900 mt-2">Laboratorio de Datos Interactivo</h3>
+        <p class="text-sm text-slate-500">Haz clic y explora cómo cambian las prioridades según el lugar.</p>
+      </div>
+
+      <!-- Zona de Analogías: Flip-Cards 3D -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="flip-card">
+          <div class="flip-card-inner shadow-lg rounded-2xl">
+            <div class="flip-card-front border border-indigo-100">
+              <span class="text-4xl mb-2">📊</span>
+              <h4 class="font-bold text-indigo-900 text-sm">¿Qué es un formato TSV?</h4>
+              <p class="text-xs text-slate-400 mt-2">Pasa el ratón o toca para descubrir ✨</p>
+            </div>
+            <div class="flip-card-back bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
+              <h4 class="font-bold text-base mb-2">Valores por Tabulación</h4>
+              <p class="text-xs leading-relaxed">Significa "Tab-Separated Values". Es un truco mágico que permite pegar texto directo desde la IA y que Excel lo ordene de inmediato en filas y columnas sin desordenarse.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="flip-card">
+          <div class="flip-card-inner shadow-lg rounded-2xl">
+            <div class="flip-card-front border border-emerald-100">
+              <span class="text-4xl mb-2">🛡️</span>
+              <h4 class="font-bold text-emerald-900 text-sm">Normas del Colegio vs Empresa</h4>
+              <p class="text-xs text-slate-400 mt-2">Pasa el ratón o toca para descubrir ✨</p>
+            </div>
+            <div class="flip-card-back bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
+              <h4 class="font-bold text-base mb-2">Entornos Diferentes</h4>
+              <p class="text-xs leading-relaxed">En las empresas se cuidan de maquinarias pesadas (Seguridad Industrial). En nuestro colegio nos cuidamos ordenando mochilas y usando útiles escolares con precaución.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="flip-card">
+          <div class="flip-card-inner shadow-lg rounded-2xl">
+            <div class="flip-card-front border border-purple-100">
+              <span class="text-4xl mb-2">⚡</span>
+              <h4 class="font-bold text-purple-900 text-sm">El Signo Fiel de Excel: (=)</h4>
+              <p class="text-xs text-slate-400 mt-2">Pasa el ratón o toca para descubrir ✨</p>
+            </div>
+            <div class="flip-card-back bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+              <h4 class="font-bold text-base mb-2">¡Despierta las Celdas!</h4>
+              <p class="text-xs leading-relaxed">Si escribes números solos, no pasa nada. Pero al poner el signo igual (=) al inicio, la celda se convierte en una supercomputadora lista para calcular el resultado de forma automática.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- [MOD-B] Data Lab Dashboard con Chart.js -->
+      <div class="bg-slate-50 rounded-2xl p-4 md:p-6 border border-slate-100">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+          <div>
+            <h4 class="font-bold text-slate-900 text-base">Visualizador Analítico de Normas</h4>
+            <p class="text-xs text-slate-500">Compara los indicadores clave generados para el proyecto.</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="updateChartDataset('importancia')" id="btn-importancia" class="bg-indigo-600 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow hover:bg-indigo-700 transition-all">
+              Ver Nivel de Importancia
+            </button>
+            <button onclick="updateChartDataset('frecuencia')" id="btn-frecuencia" class="bg-slate-200 text-slate-700 px-4 py-1.5 rounded-xl text-xs font-semibold hover:bg-slate-300 transition-all">
+              Ver Frecuencia Mensual
+            </button>
+          </div>
+        </div>
+        
+        <!-- Contenedor del Gráfico con tamaño controlado -->
+        <div class="relative w-full h-64 md:h-80 flex justify-center">
+          <canvas id="safetyChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOQUE: TRABAJO EN LA SALA (PASOS DETALLADOS) -->
+    <section class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
+      <div class="mb-6">
+        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase">
+          🖥️ TRABAJO EN LA SALA
+        </span>
+        <h3 class="text-2xl text-slate-900 mt-2">Tu Reto Práctico: Mi solución con IA</h3>
+        <p class="text-sm text-slate-500">Sigue paso a paso las instrucciones técnicas del profesor para armar tus archivos digitales.</p>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Paso 1 -->
+        <div class="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+          <div class="bg-indigo-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow">1</div>
+          <div class="space-y-2">
+            <h4 class="font-bold text-slate-900 text-sm md:text-base flex items-center gap-1">
+              🤖 Paso 1: Genera la tabla de normas con IA
+            </h4>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Abre tu asistente de Inteligencia Artificial (ChatGPT, Copilot, Gemini) y copia de manera exacta el siguiente prompt estratégico:
+            </p>
+            <div class="bg-slate-900 text-emerald-400 p-3 rounded-xl font-mono text-[11px] select-all relative border border-slate-800 shadow-inner">
+              "Genera una tabla de normas de seguridad industrial y escolar. La tabla debe tener las columnas: Código, Norma de seguridad, Lugar, Importancia (1-5), Frecuencia (veces al mes). Usa códigos N001 hasta N010. Incluye 10 normas diferentes, algunas para el colegio y otras para la empresa. Los valores de Importancia y Frecuencia deben ser números enteros del 1 al 5 y del 1 al 10 respectivamente. Entrega SOLO la tabla en formato TSV con exactamente 10 filas de datos más 1 fila de encabezados, sin explicaciones, sin markdown, sin código, sin comillas. Usa tabulaciones reales como separador."
+            </div>
+            <p class="text-xs text-amber-700 bg-amber-50 p-2 rounded-lg font-medium">
+              💡 Pegar en la celda <strong>A1</strong> de Excel. Si todo se agrupa en la columna A, vuelve a pedirle a la IA: <em>"El texto no tiene tabulaciones, entrega la tabla en formato TSV con tabulaciones reales entre columnas"</em>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Paso 2 -->
+        <div class="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+          <div class="bg-indigo-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow">2</div>
+          <div class="space-y-2 w-full">
+            <h4 class="font-bold text-slate-900 text-sm md:text-base">📊 Paso 2: Dale formato visual a tu tabla en Excel</h4>
+            <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
+              <li>Selecciona el rango <span class="font-semibold text-indigo-700">A1:E11</span> y ajusta el ancho de las columnas.</li>
+              <li>Aplica fuente <span class="font-semibold">Arial</span>, tamaño <span class="font-semibold">11</span>, alineación <span class="font-semibold">Centrar</span> horizontal y vertical.</li>
+              <li>Encabezados (A1:E1): Relleno <span class="font-semibold text-blue-600">Azul claro</span>, texto <span class="font-semibold">Blanco</span> y <span class="font-semibold">Negrita</span>.</li>
+              <li>Columna Lugar: Celda con "Colegio" = <span class="px-1 bg-green-200 rounded text-green-800">Verde claro</span>; Celda con "Empresa" = <span class="px-1 bg-orange-200 rounded text-orange-800">Naranja claro</span>.</li>
+              <li>Importancia (D2:D11): Si el valor es <span class="font-bold text-red-600">4 o 5</span>, pon la fuente en <span class="font-semibold text-red-700">Rojo oscuro</span> y en negrita.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Paso 3 -->
+        <div class="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+          <div class="bg-indigo-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow">3</div>
+          <div class="space-y-2 w-full">
+            <h4 class="font-bold text-slate-900 text-sm md:text-base">⚙️ Paso 3: Realiza operaciones básicas (Números fijos)</h4>
+            <p class="text-xs text-slate-600">
+              Escribe las siguientes fórmulas matemáticas directamente en celdas vacías debajo de tu tabla (no uses letras de celdas, digita los valores numéricos fijos):
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-[11px] mt-1">
+              <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+                <span class="block font-bold text-slate-500">Celda E13 (Suma)</span>
+                <code class="text-indigo-600 font-bold text-xs">=5+3</code>
+                <span class="block text-slate-400 mt-1">Importancia N001 + N003</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+                <span class="block font-bold text-slate-500">Celda E14 (Multiplicación)</span>
+                <code class="text-purple-600 font-bold text-xs">=4*2</code>
+                <span class="block text-slate-400 mt-1">Importancia * Frecuencia N005</span>
+              </div>
+              <div class="bg-white p-2 rounded-xl border border-slate-200 shadow-sm">
+                <span class="block font-bold text-slate-500">Celda E15 (Resta)</span>
+                <code class="text-emerald-600 font-bold text-xs">=6-3</code>
+                <span class="block text-slate-400 mt-1">Frecuencia N002 - N008</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paso 4 -->
+        <div class="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+          <div class="bg-indigo-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow">4</div>
+          <div class="space-y-2 w-full">
+            <h4 class="font-bold text-slate-900 text-sm md:text-base">🖼️ Paso 4: Crea la presentación con Secuencia Lógica</h4>
+            <p class="text-xs text-slate-600">
+              Abre PowerPoint (<kbd class="bg-white px-1 border rounded text-slate-500">Ctrl + U</kbd>) y estructura tu exposición con orden:
+            </p>
+            <ul class="text-xs text-slate-600 space-y-1.5 list-disc pl-4">
+              <li><strong>Diapositiva 1:</strong> Título "Normas de seguridad en mi entorno", tu nombre completo y tu grado.</li>
+              <li><strong>10 Diapositivas nuevas:</strong> Inserta una para cada norma con los datos correspondientes de tu Excel.</li>
+              <li><strong>Arreglo Lógico Obligatorio:</strong> Arrastra las diapositivas para agrupar primero las del <span class="font-semibold text-emerald-700">Colegio</span> y luego las de la <span class="font-semibold text-orange-700">Empresa</span>. Dentro de cada grupo, ordénalas de mayor a menor importancia (del 5 al 1).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Paso Final -->
+        <div class="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100 hover:shadow-md transition-all">
+          <div class="bg-indigo-600 text-white text-xs font-bold w-7 h-7 rounded-full flex items-center justify-center shrink-0 shadow">5</div>
+          <div class="space-y-1 w-full">
+            <h4 class="font-bold text-slate-900 text-sm md:text-base">💾 Paso Final: Guarda tus archivos de forma técnica</h4>
+            <p class="text-xs text-slate-600">
+              Guarda tus dos productos usando los nombres exactos estipulados sin usar tildes, espacios ni caracteres raros:
+            </p>
+            <div class="bg-slate-100 p-2.5 rounded-xl font-mono text-[11px] text-slate-800 mt-2 space-y-1 border border-slate-200">
+              <div>📊 Excel: <span class="text-indigo-600 font-bold">5_seguridad_normas_200526_tunombre.xlsx</span></div>
+              <div>🖼️ PowerPoint: <span class="text-purple-600 font-bold">5_seguridad_presentacion_200526_tunombre.pptx</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reto Avanzado -->
+        <div class="bg-amber-400/10 border border-amber-300 rounded-2xl p-4 flex items-start gap-3">
+          <span class="text-xl">✨</span>
+          <div>
+            <h5 class="font-bold text-amber-900 text-sm">Reto Avanzado Opcional:</h5>
+            <p class="text-xs text-amber-950 leading-relaxed mt-0.5">
+              ¡Agrega un Semáforo de Control al final de tu PowerPoint! Usa <span class="font-semibold">Insertar > Formas > Óvalo</span> y dibuja tres círculos: <span class="text-red-600 font-bold">Rojo</span> (importancia 5, críticas), <span class="text-yellow-600 font-bold">Amarillo</span> (importancia 3 o 4, atención regular) y <span class="text-green-600 font-bold">Verde</span> (importancia 1 o 2, recordatorios básicos).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CONJUNTA: INVESTIGACIÓN Y TAREA EN HOJA SUELTA -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
+      <!-- BLOQUE: INVESTIGACIÓN -->
+      <section class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100 flex flex-col justify-between">
+        <div>
+          <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase">
+            🔍 INVESTIGACIÓN
+          </span>
+          <h4 class="text-lg text-slate-900 mt-3 font-bold">Misión de Consulta Autónoma</h4>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Escribe e investiga en el buscador de Google la siguiente pregunta clave, luego anota tu hallazgo en el cuaderno de tecnología de forma limpia:
+          </p>
+          <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 mt-4 font-semibold text-sm text-indigo-950 text-center">
+            "¿Qué significa la palabra 'Ergonomía' en un puesto de trabajo con computadoras y cómo nos ayuda a cuidar la espalda?"
+          </div>
+        </div>
+        <div class="text-xs text-slate-400 mt-4 italic text-right">
+          Anota al menos 3 tips encontrados 📝
+        </div>
+      </section>
+
+      <!-- BLOQUE: TAREA EN HOJA SUELTA -->
+      <section id="seccion-tarea" class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute top-[-20%] right-[-10%] w-32 h-32 bg-red-500/10 rounded-full blur-xl"></div>
+        
+        <div>
+          <span class="bg-rose-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+            📄 TAREA EN HOJA SUELTA
+          </span>
+          
+          <div class="flex items-center gap-4 mt-4">
+            <!-- Flecha interactiva animada rebotando hacia la izquierda -->
+            <div class="text-3xl text-amber-400 animate-bounce-left font-bold shrink-0">
+              ⬅️🔄
+            </div>
+            <div>
+              <h4 class="text-base text-amber-300 font-bold">¡Atención! Esta semana NO hay entrega física</h4>
+              <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+                Ojo estudiantes: No deben entregar hojas sueltas al profesor. La única actividad obligatoria de control va directo en su cuaderno, la cual es la <strong class="text-indigo-300">Investigación Autónoma</strong> ubicada justo en el recuadro de la izquierda. ¡Mantengamos nuestros apuntes ordenados!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/10 p-2 rounded-xl text-center text-[11px] text-slate-300 mt-4 border border-white/5">
+          Revisión directa en el aula de clases presencial 🏫
+        </div>
+      </section>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- SECCIÓN 3: GAMIFICACIÓN & CIERRE (Micro-Quiz)   -->
+    <!-- ================================================ -->
+    <section class="bg-white rounded-3xl p-6 shadow-xl border border-slate-100">
+      <div class="mb-6 text-center">
+        <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full uppercase">
+          🎮 GAMIFICACIÓN
+        </span>
+        <h3 class="text-2xl text-slate-900 mt-2">Pon a prueba tu mente: Desafío de Seguridad</h3>
+        <p class="text-sm text-slate-500">Responde las preguntas para desbloquear tu puntaje tecnológico final.</p>
+      </div>
+
+      <!-- Formulario del Quiz -->
+      <div class="space-y-6 max-w-2xl mx-auto">
+        <!-- Pregunta 1 -->
+        <div class="quiz-question bg-slate-50 p-4 rounded-2xl border border-slate-100 transition-all" data-correct="A">
+          <h5 class="font-bold text-slate-900 text-sm mb-3">1. ¿Cuál es el orden lógico correcto que debe seguir el tren de tus ideas en una presentación?</h5>
+          <div class="grid grid-cols-1 gap-2 text-xs">
+            <button onclick="checkAnswer(this, 'A')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">A) Inicio (Título), Cuerpo (Desarrollo) y Cierre (Mensaje Final)</button>
+            <button onclick="checkAnswer(this, 'B')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">B) Cierre, Título y las imágenes desordenadas al final</button>
+            <button onclick="checkAnswer(this, 'C')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">C) Solo imágenes sin ningún tipo de texto ni presentación</button>
+          </div>
+        </div>
+
+        <!-- Pregunta 2 -->
+        <div class="quiz-question bg-slate-50 p-4 rounded-2xl border border-slate-100 transition-all" data-correct="B">
+          <h5 class="font-bold text-slate-900 text-sm mb-3">2. Si al pegar la tabla de la IA en Excel los datos quedan juntos en la misma columna, ¿qué formato falló?</h5>
+          <div class="grid grid-cols-1 gap-2 text-xs">
+            <button onclick="checkAnswer(this, 'A')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">A) Archivo de música MP3</button>
+            <button onclick="checkAnswer(this, 'B')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">B) Formato TSV con tabulaciones reales separadoras</button>
+            <button onclick="checkAnswer(this, 'C')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">C) Formato de dibujo a mano alzada</button>
+          </div>
+        </div>
+
+        <!-- Pregunta 3 -->
+        <div class="quiz-question bg-slate-50 p-4 rounded-2xl border border-slate-100 transition-all" data-correct="C">
+          <h5 class="font-bold text-slate-900 text-sm mb-3">3. ¿Cómo debe iniciar SIEMPRE cualquier fórmula matemática que quieras calcular en Excel?</h5>
+          <div class="grid grid-cols-1 gap-2 text-xs">
+            <button onclick="checkAnswer(this, 'A')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">A) Con una letra mayúscula cualquiera</button>
+            <button onclick="checkAnswer(this, 'B')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">B) Con un punto y coma final</button>
+            <button onclick="checkAnswer(this, 'C')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">C) Con el signo matemático igual (=)</button>
+          </div>
+        </div>
+
+        <!-- Pregunta 4 -->
+        <div class="quiz-question bg-slate-50 p-4 rounded-2xl border border-slate-100 transition-all" data-correct="A">
+          <h5 class="font-bold text-slate-900 text-sm mb-3">4. En el semáforo de seguridad propuesto, ¿qué significa el color Rojo?</h5>
+          <div class="grid grid-cols-1 gap-2 text-xs">
+            <button onclick="checkAnswer(this, 'A')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">A) Normas críticas de importancia nivel 5 que jamás debemos olvidar</button>
+            <button onclick="checkAnswer(this, 'B')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">B) Que la clase ha terminado y podemos apagar las computadoras</button>
+            <button onclick="checkAnswer(this, 'C')" class="option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all">C) Recordatorios básicos de nivel de importancia 1 o 2</button>
+          </div>
+        </div>
+
+        <!-- Botón Mostrar Resultado -->
+        <div class="text-center pt-2">
+          <button onclick="revealQuizScore()" class="bg-purple-600 text-white font-bold px-6 py-3 rounded-2xl shadow-lg hover:bg-purple-700 hover:scale-105 transition-all duration-300">
+            📊 Verificar mi Resultado Final
+          </button>
+        </div>
+
+        <!-- Bloque de Score Oculto -->
+        <div id="quizScoreBlock" class="hidden text-center p-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl shadow-xl transition-all duration-500">
+          <h4 class="text-xl font-bold">¡Desafío Completado con Éxito! 🎉</h4>
+          <p class="text-sm text-emerald-100 mt-1">Has respondido todas las preguntas de control de la sesión.</p>
+          <div class="text-4xl font-black mt-3" id="scoreValue">0 / 4</div>
+          <p class="text-xs text-emerald-200 mt-2">¡Sigue entrenando tu mente lógica con el Prof. William Fdo Bernal!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================ -->
+  <!-- SECCIÓN 4: FOOTER (Regla de Oro)               -->
+  <!-- ================================================ -->
+  <footer class="mt-16 bg-slate-950 text-slate-400 text-center py-8 rounded-t-3xl border-t border-slate-900 shadow-inner max-w-5xl mx-auto">
+    <p class="text-xs md:text-sm font-medium tracking-wide">
+      © 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática
+    </p>
+    <p class="text-[10px] text-slate-600 mt-1">
+      Colegio Santa Mariana de Jesús • Buga, Valle del Cauca, Colombia
+    </p>
+  </footer>
+
+  <!-- Scripts funcionales embebidos -->
+  <script>
+    // Configuración Inicial Obligatoria de Rutas y Clipboard
+    function copiarEnlace(){
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const t = document.getElementById('toastCopiado');
+        if(t){
+          t.classList.remove('hidden');
+          setTimeout(()=> t.classList.add('hidden'), 2000);
+        } else {
+          alert("Enlace copiado ✅");
+        }
+      }).catch(() => {
+        alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+      });
+    }
+
+    // Datos lógicos y configuración del motor Chart.js
+    const ctx = document.getElementById('safetyChart').getContext('2d');
+    
+    // Datasets dinámicos para simulación analítica escolar
+    const dataLabValues = {
+      importancia: [5, 4, 5, 3, 4, 5, 3, 2, 4, 5],
+      frecuencia: [10, 8, 9, 4, 6, 10, 5, 3, 7, 9],
+      labels: ['Norma 1', 'Norma 2', 'Norma 3', 'Norma 4', 'Norma 5', 'Norma 6', 'Norma 7', 'Norma 8', 'Norma 9', 'Norma 10']
+    };
+
+    let currentChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dataLabValues.labels,
+        datasets: [{
+          label: 'Nivel de Importancia (1-5)',
+          data: dataLabValues.importancia,
+          backgroundColor: 'rgba(79, 70, 229, 0.75)',
+          borderColor: 'rgb(79, 70, 229)',
+          borderWidth: 2,
+          borderRadius: 8,
+          hoverBackgroundColor: 'rgba(79, 70, 229, 0.95)'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, labels: { font: { family: 'Quicksand', weight: '600' } } }
+        },
+        scales: {
+          y: { beginAtZero: true, max: 11, grid: { color: 'rgba(0,0,0,0.05)' } },
+          x: { grid: { display: false } }
+        },
+        animation: { duration: 1000, easing: 'easeOutBounce' }
+      }
+    });
+
+    function updateChartDataset(type) {
+      const btnImp = document.getElementById('btn-importancia');
+      const btnFrec = document.getElementById('btn-frecuencia');
+      
+      if (type === 'importancia') {
+        currentChart.data.datasets[0].label = 'Nivel de Importancia (1-5)';
+        currentChart.data.datasets[0].data = dataLabValues.importancia;
+        currentChart.data.datasets[0].backgroundColor = 'rgba(79, 70, 229, 0.75)';
+        currentChart.data.datasets[0].borderColor = 'rgb(79, 70, 229)';
+        
+        btnImp.className = "bg-indigo-600 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow hover:bg-indigo-700 transition-all";
+        btnFrec.className = "bg-slate-200 text-slate-700 px-4 py-1.5 rounded-xl text-xs font-semibold hover:bg-slate-300 transition-all";
+      } else {
+        currentChart.data.datasets[0].label = 'Frecuencia Mensual (Veces al mes)';
+        currentChart.data.datasets[0].data = dataLabValues.frecuencia;
+        currentChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.75)';
+        currentChart.data.datasets[0].borderColor = 'rgb(16, 185, 129)';
+        
+        btnImp.className = "bg-slate-200 text-slate-700 px-4 py-1.5 rounded-xl text-xs font-semibold hover:bg-slate-300 transition-all";
+        btnFrec.className = "bg-emerald-600 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow hover:bg-emerald-700 transition-all";
+      }
+      currentChart.update();
+    }
+
+    // Lógica Gamificada del Micro-Quiz Interactivo
+    const userAnswers = {};
+
+    function checkAnswer(button, selectedLetter) {
+      const questionBlock = button.closest('.quiz-question');
+      const correctLetter = questionBlock.getAttribute('data-correct');
+      const allButtons = questionBlock.querySelectorAll('.option-btn');
+
+      // Limpiar selecciones previas de este bloque de pregunta
+      allButtons.forEach(btn => {
+        btn.className = "option-btn text-left p-3 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 transition-all";
+      });
+
+      // Validar respuesta de forma inmediata e interactiva
+      if (selectedLetter === correctLetter) {
+        button.className = "option-btn text-left p-3 rounded-xl bg-emerald-500 text-white font-semibold transition-all shadow-md";
+        userAnswers[correctLetter] = true;
+        questionBlock.classList.remove('animate-shake');
+      } else {
+        button.className = "option-btn text-left p-3 rounded-xl bg-rose-500 text-white font-semibold transition-all shadow-md";
+        questionBlock.classList.add('animate-shake');
+        setTimeout(() => questionBlock.classList.remove('animate-shake'), 300);
+      }
+
+      // Almacenar respuesta final elegida por el alumno
+      questionBlock.setAttribute('data-user-selected', selectedLetter);
+    }
+
+    function revealQuizScore() {
+      const questions = document.querySelectorAll('.quiz-question');
+      let finalScore = 0;
+      let completedAll = true;
+
+      questions.forEach(q => {
+        const correct = q.getAttribute('data-correct');
+        const selected = q.getAttribute('data-user-selected');
+        
+        if (!selected) {
+          completedAll = false;
+        } else if (selected === correct) {
+          finalScore++;
+        }
+      });
+
+      if (!completedAll) {
+        alert("⚠️ ¡Por favor responde todas las preguntas antes de validar tu puntaje final!");
+        return;
+      }
+
+      const scoreBlock = document.getElementById('quizScoreBlock');
+      const scoreValue = document.getElementById('scoreValue');
+      
+      scoreValue.innerText = `${finalScore} / ${questions.length}`;
+      scoreBlock.classList.remove('hidden');
+      
+      // Desplazar la pantalla de forma suave hacia el puntaje
+      scoreBlock.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
