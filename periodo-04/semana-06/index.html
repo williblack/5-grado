@@ -1,1 +1,580 @@
-hola
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Los Objetos en PowerPoint! - Prof. William Fdo Bernal</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            light: '#4f46e5', // Indigo
+                            main: '#7c3aed', // Violet
+                            dark: '#c026d3', // Fuchsia
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'bounce-left': 'bounceLeft 1s infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        bounceLeft: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(-15px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(124, 58, 237, 0.5)' },
+                            '50%': { boxShadow: '0 0 25px rgba(124, 58, 237, 0.9)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            background-attachment: fixed;
+            color: #f8fafc;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-left: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+
+        /* Quiz Feedback */
+        .correct { background-color: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; }
+        .incorrect { background-color: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pt-6 pb-0 px-4 md:px-8 text-lg">
+
+    <div class="max-w-6xl mx-auto w-full flex flex-wrap justify-end gap-3 mb-6 z-50 relative">
+        <a href="../../../index.html"
+           class="bg-slate-800/80 text-white px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 backdrop-blur border border-white/10 flex items-center gap-2 font-bold">
+           <i class="fas fa-home"></i> Inicio (Grado)
+        </a>
+      
+        <a href="../../index.html"
+           class="bg-brand-main text-white px-5 py-2.5 rounded-xl shadow-[0_0_15px_rgba(124,58,237,0.5)] hover:scale-105 transition-all duration-300 flex items-center gap-2 font-bold">
+           <i class="fas fa-folder-open"></i> Menú del Periodo
+        </a>
+      
+        <button type="button" onclick="copiarEnlace()"
+           class="bg-emerald-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 font-bold">
+           <i class="fas fa-link"></i> Copiar enlace
+        </button>
+    </div>
+      
+    <div id="toastCopiado" class="fixed top-6 right-6 hidden bg-black/90 border border-emerald-500 text-emerald-400 px-6 py-4 rounded-xl shadow-2xl backdrop-blur z-50 font-bold text-xl flex items-center gap-3">
+        <i class="fas fa-check-circle"></i> Enlace copiado
+    </div>
+
+    <main class="max-w-6xl mx-auto w-full flex-grow flex flex-col gap-8">
+
+        <header class="glass-card rounded-3xl p-8 relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand-dark rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float"></div>
+            <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-brand-light rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-float" style="animation-delay: 1.5s;"></div>
+            
+            <div class="relative z-10 text-center space-y-4">
+                <div class="inline-block bg-white/10 px-4 py-1.5 rounded-full text-brand-light font-bold tracking-wider text-sm mb-2 border border-white/10 shadow-sm">
+                    COLEGIO SANTA MARIANA DE JESÚS
+                </div>
+                <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400 mb-2 drop-shadow-lg">
+                    ¡Los Objetos en PowerPoint!
+                </h1>
+                <p class="text-xl text-slate-300 font-semibold">
+                    Prof. William Fdo Bernal | Grado 5°
+                </p>
+            </div>
+        </header>
+
+        <section class="glass-card rounded-3xl p-8 border-l-8 border-l-cyan-400">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-cyan-500 text-white text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+                    📝 COPIAR AL CUADERNO
+                </span>
+                <h2 class="text-3xl font-bold text-white">¿Qué le pongo a mi diapositiva?</h2>
+            </div>
+            <div class="bg-slate-800/50 rounded-2xl p-6 text-slate-200 space-y-4 text-xl">
+                <p>
+                    <i class="fas fa-link text-cyan-400 mr-2"></i>
+                    <strong>Conexión:</strong> La semana pasada organizamos una presentación sobre nuestra seguridad. Hoy veremos qué elementos usar para mostrar esa información.
+                </p>
+                <p>
+                    Imagina que una diapositiva es como una <strong>habitación vacía</strong>. Un <strong>objeto</strong> es cualquier "mueble" que metemos para que se vea genial. Tenemos 4 tipos:
+                </p>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 font-semibold">
+                    <li class="bg-white/5 p-4 rounded-xl flex items-center gap-4 hover:bg-white/10 transition">
+                        <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center text-2xl"><i class="fas fa-font"></i></div>
+                        Texto (Palabras y títulos)
+                    </li>
+                    <li class="bg-white/5 p-4 rounded-xl flex items-center gap-4 hover:bg-white/10 transition">
+                        <div class="w-12 h-12 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center text-2xl"><i class="fas fa-image"></i></div>
+                        Imágenes (Fotos o dibujos)
+                    </li>
+                    <li class="bg-white/5 p-4 rounded-xl flex items-center gap-4 hover:bg-white/10 transition">
+                        <div class="w-12 h-12 bg-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center text-2xl"><i class="fas fa-shapes"></i></div>
+                        Autoformas (Estrellas, flechas)
+                    </li>
+                    <li class="bg-white/5 p-4 rounded-xl flex items-center gap-4 hover:bg-white/10 transition">
+                        <div class="w-12 h-12 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center text-2xl"><i class="fas fa-film"></i></div>
+                        Videos (Clips en movimiento)
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-purple-500 text-white text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider animate-pulse-glow">
+                    💻 INTERACTUAR EN EL PC
+                </span>
+                <h2 class="text-3xl font-bold text-white">Simulador: Decora tu Diapositiva</h2>
+            </div>
+            
+            <p class="text-slate-300 mb-6 text-lg">Haz clic en los botones para "insertar" objetos en la diapositiva y observa cómo cambia tu gráfico de datos en tiempo real.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div class="flex flex-col gap-4">
+                    <div class="grid grid-cols-4 gap-2">
+                        <button onclick="agregarObjeto('texto')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-xl transition shadow-lg"><i class="fas fa-font"></i> Texto</button>
+                        <button onclick="agregarObjeto('imagen')" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded-xl transition shadow-lg"><i class="fas fa-image"></i> Foto</button>
+                        <button onclick="agregarObjeto('forma')" class="bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 rounded-xl transition shadow-lg"><i class="fas fa-star"></i> Forma</button>
+                        <button onclick="agregarObjeto('video')" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl transition shadow-lg"><i class="fas fa-film"></i> Video</button>
+                    </div>
+                    
+                    <div class="relative w-full aspect-video bg-white rounded-xl shadow-inner border-4 border-slate-700 overflow-hidden" id="canvasContainer">
+                        <canvas id="slideCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+                            <span class="text-4xl font-black text-slate-400">DIAPOSITIVA</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="limpiarCanvas()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-xl transition shadow">
+                        <i class="fas fa-trash-alt"></i> Limpiar Diapositiva
+                    </button>
+                </div>
+
+                <div class="glass-panel rounded-xl p-6 flex flex-col items-center justify-center">
+                    <h3 class="text-xl font-bold text-cyan-300 mb-4 text-center">Laboratorio de Datos</h3>
+                    <div class="w-full max-w-xs relative">
+                        <canvas id="objetosChart"></canvas>
+                    </div>
+                    <div class="mt-6 text-center text-slate-300 bg-black/30 w-full py-2 rounded-lg font-mono">
+                        Total de objetos: <span id="totalObjetos" class="font-bold text-white text-xl">0</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8 border-t-8 border-t-brand-main">
+            <div class="flex items-center gap-4 mb-6">
+                <span class="bg-brand-main text-white text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+                    🖥️ TRABAJO EN LA SALA
+                </span>
+                <h2 class="text-3xl font-bold text-white">Misión Práctica: Excel + IA</h2>
+            </div>
+
+            <p class="text-slate-300 mb-8 text-xl">
+                ¡Vamos a usar Excel como una calculadora mágica gigante! Sigue los pasos numerados.
+            </p>
+
+            <div class="space-y-6">
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h3 class="text-2xl font-bold text-cyan-300 mb-3 flex items-center gap-3">
+                        <span class="bg-cyan-500/20 text-cyan-400 w-10 h-10 rounded-full flex items-center justify-center">1</span>
+                        🤖 Pedir ayuda a la IA
+                    </h3>
+                    <p class="text-slate-300 mb-3">Copia este texto exacto y pégalo en una IA (como ChatGPT o Gemini):</p>
+                    <div class="bg-black/50 p-4 rounded-xl relative group">
+                        <p id="promptText" class="font-mono text-sm text-green-400 leading-relaxed">Genera una tabla de 3 columnas (Objeto, Tipo, Cantidad) con 10 filas de datos. Objeto: nombre de algo que se pueda poner en una diapositiva de PowerPoint (ej. 'Título principal', 'Foto de un perro', 'Flecha verde', 'Video de ciencia'). Tipo: puede ser 'Texto', 'Imagen', 'Autoforma' o 'Video'. Cantidad: número entero entre 1 y 10 (cuántas veces usarías ese objeto). Entrega SOLO la tabla en formato TSV con exactamente 10 filas de datos más 1 fila de encabezados, sin explicaciones, sin markdown, sin código, sin comillas. Usa tabulaciones reales como separador.</p>
+                        <button onclick="copiarPrompt()" class="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white p-2 rounded-lg transition opacity-0 group-hover:opacity-100">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <p class="text-slate-400 text-sm mt-2">💡 Pega el resultado que te dé la IA en la celda A1 de Excel.</p>
+                </div>
+
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h3 class="text-2xl font-bold text-orange-300 mb-3 flex items-center gap-3">
+                        <span class="bg-orange-500/20 text-orange-400 w-10 h-10 rounded-full flex items-center justify-center">2</span>
+                        📊 Pintar y dar formato
+                    </h3>
+                    <ul class="list-disc list-inside text-slate-300 space-y-2 ml-2">
+                        <li>Fila 1 (Títulos): Ponlos en <strong>Negrita</strong> y pinta el fondo de naranja claro.</li>
+                        <li>Columna C (Cantidades): Pinta las celdas de color verde claro.</li>
+                        <li>Bordes: Selecciona todo y pon <strong>Todos los bordes</strong>.</li>
+                        <li>Doble clic entre las letras de las columnas para ajustar el tamaño.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                    <h3 class="text-2xl font-bold text-yellow-300 mb-3 flex items-center gap-3">
+                        <span class="bg-yellow-500/20 text-yellow-400 w-10 h-10 rounded-full flex items-center justify-center">3</span>
+                        ⚙️ Matemáticas en Excel
+                    </h3>
+                    <p class="text-slate-300 mb-3">Haz estas sumas usando el signo igual (=). Ejemplo: <code>=3+5+2</code></p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-slate-200">
+                        <div class="bg-black/30 p-4 rounded-xl border-l-4 border-l-blue-400">
+                            <strong>a)</strong> Suma los primeros tres objetos en la celda E2.
+                        </div>
+                        <div class="bg-black/30 p-4 rounded-xl border-l-4 border-l-green-400">
+                            <strong>b)</strong> Suma todos los que son "Imagen" en la celda E4.
+                        </div>
+                        <div class="bg-black/30 p-4 rounded-xl border-l-4 border-l-yellow-400">
+                            <strong>c)</strong> Suma TODAS las cantidades en la celda E6.
+                        </div>
+                        <div class="bg-black/30 p-4 rounded-xl border-l-4 border-l-red-400">
+                            <strong>d)</strong> (Opcional) Multiplica la cantidad de videos x 2 en E8.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 p-6 rounded-2xl border border-white/10 hover:bg-white/10 transition-all flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-emerald-300 flex items-center gap-3">
+                            <span class="bg-emerald-500/20 text-emerald-400 w-10 h-10 rounded-full flex items-center justify-center">4</span>
+                            💾 Guardar Misión
+                        </h3>
+                        <p class="text-slate-300 mt-2">Guarda como: <code class="bg-black/50 px-2 py-1 rounded text-emerald-300">5_objetos_powerpoint_140425_tunombre.xlsx</code></p>
+                    </div>
+                    <i class="fas fa-save text-5xl text-emerald-500/50"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8 overflow-hidden relative">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-black/40 p-8 rounded-2xl border border-white/5">
+                
+                <div class="flex-1 w-full relative z-10">
+                    <div class="inline-block mb-4">
+                        <span class="bg-indigo-500 text-white text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+                            🔍 INVESTIGACIÓN
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Consulta para tu cuaderno:</h3>
+                    <p class="text-xl text-indigo-200 bg-indigo-900/40 p-4 rounded-xl border border-indigo-500/30 shadow-inner">
+                        ¿Cuáles son las teclas (atajos de teclado) que se usan para <strong>Copiar</strong> y <strong>Pegar</strong> un objeto en PowerPoint?
+                    </p>
+                </div>
+
+                <div class="hidden md:flex flex-col items-center justify-center relative z-10">
+                    <div class="text-6xl text-pink-400 animate-bounce-left filter drop-shadow-[0_0_10px_rgba(244,114,182,0.8)]">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                    <span class="text-xs font-bold text-pink-300 mt-2 uppercase tracking-widest">¡Entregar!</span>
+                </div>
+
+                <div class="flex-1 w-full text-right relative z-10">
+                    <div class="inline-block mb-4">
+                        <span class="bg-pink-500 text-white text-xs font-black px-4 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+                            📄 TAREA EN HOJA SUELTA
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Misión en casa:</h3>
+                    <p class="text-xl text-pink-100 bg-pink-900/30 p-4 rounded-xl border border-pink-500/30 text-left shadow-inner">
+                        Resuelve la investigación de la izquierda en una hoja suelta debidamente marcada con tu nombre y grado para entregar la próxima clase.
+                    </p>
+                </div>
+
+                <div class="md:hidden flex flex-col items-center justify-center w-full mt-4">
+                    <span class="text-xs font-bold text-pink-300 mb-2 uppercase tracking-widest">¡La tarea es la de arriba!</span>
+                    <div class="text-5xl text-pink-400 animate-bounce" style="transform: rotate(90deg);">
+                        <i class="fas fa-arrow-left"></i>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-8 mb-10 border-t-8 border-t-yellow-400">
+            <h2 class="text-3xl font-black text-center text-yellow-400 mb-8 drop-shadow-md">
+                🎮 ¡Mini Reto de Conocimiento!
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col gap-4 shadow-lg" id="q1-card">
+                    <p class="font-bold text-xl text-white">1. ¿Qué es un objeto en PowerPoint?</p>
+                    <button onclick="checkAnswer('q1', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">A. El botón de apagado</button>
+                    <button onclick="checkAnswer('q1', true, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">B. Cualquier elemento que metemos en la diapositiva</button>
+                    <button onclick="checkAnswer('q1', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">C. El ratón del computador</button>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col gap-4 shadow-lg" id="q2-card">
+                    <p class="font-bold text-xl text-white">2. Para escribir un título, uso el objeto tipo:</p>
+                    <button onclick="checkAnswer('q2', true, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">A. Texto</button>
+                    <button onclick="checkAnswer('q2', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">B. Autoforma</button>
+                    <button onclick="checkAnswer('q2', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">C. Video</button>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 p-6 rounded-2xl flex flex-col gap-4 shadow-lg" id="q3-card">
+                    <p class="font-bold text-xl text-white">3. Las flechas y estrellas se llaman:</p>
+                    <button onclick="checkAnswer('q3', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">A. Textos brillantes</button>
+                    <button onclick="checkAnswer('q3', false, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">B. Imágenes con movimiento</button>
+                    <button onclick="checkAnswer('q3', true, this)" class="bg-slate-700/50 hover:bg-slate-600 p-3 rounded-xl text-left transition w-full">C. Autoformas</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-black/80 text-center py-6 mt-auto border-t border-white/10">
+        <p class="text-slate-400 font-bold tracking-widest text-sm">
+            © 2026 | Prof. William Fdo Bernal - Área de Tecnología e Informática
+        </p>
+    </footer>
+
+    <script>
+        // --- FUNCIÓN OBLIGATORIA: Copiar Enlace ---
+        function copiarEnlace() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                const t = document.getElementById('toastCopiado');
+                if (t) {
+                    t.classList.remove('hidden');
+                    // Animación suave de entrada
+                    t.style.opacity = '0';
+                    t.style.transform = 'translateY(-20px)';
+                    t.style.transition = 'all 0.3s ease';
+                    setTimeout(() => {
+                        t.style.opacity = '1';
+                        t.style.transform = 'translateY(0)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                        t.style.opacity = '0';
+                        setTimeout(() => t.classList.add('hidden'), 300);
+                    }, 2500);
+                } else {
+                    alert("Enlace copiado ✅");
+                }
+            }).catch(() => {
+                alert("No se pudo copiar automáticamente. Copia el enlace manualmente desde la barra del navegador.");
+            });
+        }
+
+        function copiarPrompt() {
+            const texto = document.getElementById('promptText').innerText;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("¡Instrucción para la IA copiada!");
+            });
+        }
+
+        // --- SIMULADOR CANVAS & CHART.JS ---
+        const canvas = document.getElementById('slideCanvas');
+        const ctx = canvas.getContext('2d');
+        let chartInstance = null;
+        
+        // Estado de los datos
+        let objetosData = {
+            texto: 0,
+            imagen: 0,
+            forma: 0,
+            video: 0
+        };
+
+        // Ajustar tamaño del canvas para que coincida con su contenedor visual
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        // Inicializar gráfico
+        function initChart() {
+            const ctxChart = document.getElementById('objetosChart').getContext('2d');
+            
+            Chart.defaults.color = '#cbd5e1';
+            Chart.defaults.font.family = 'Nunito';
+
+            chartInstance = new Chart(ctxChart, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Textos', 'Imágenes', 'Formas', 'Videos'],
+                    datasets: [{
+                        data: [0, 0, 0, 0],
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)', // Azul (Texto)
+                            'rgba(22, 163, 74, 0.8)',  // Verde (Imagen)
+                            'rgba(234, 179, 8, 0.8)',  // Amarillo (Forma)
+                            'rgba(220, 38, 38, 0.8)'   // Rojo (Video)
+                        ],
+                        borderColor: 'rgba(15, 23, 42, 1)',
+                        borderWidth: 2,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 20, font: { size: 14, weight: 'bold' } } },
+                        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', titleFont: { size: 16 }, bodyFont: { size: 14 } }
+                    },
+                    animation: { animateScale: true, animateRotate: true }
+                }
+            });
+        }
+
+        // Función principal del simulador: Agregar objeto
+        function agregarObjeto(tipo) {
+            // Asegurar tamaño correcto antes de dibujar
+            if(canvas.width === 0) resizeCanvas();
+
+            // Actualizar datos
+            objetosData[tipo]++;
+            
+            // Actualizar Chart
+            chartInstance.data.datasets[0].data = [
+                objetosData.texto,
+                objetosData.imagen,
+                objetosData.forma,
+                objetosData.video
+            ];
+            chartInstance.update();
+
+            // Actualizar contador total
+            const total = objetosData.texto + objetosData.imagen + objetosData.forma + objetosData.video;
+            document.getElementById('totalObjetos').innerText = total;
+
+            // Dibujar en el Canvas en posición aleatoria
+            const x = Math.random() * (canvas.width - 60) + 30;
+            const y = Math.random() * (canvas.height - 60) + 30;
+            
+            ctx.beginPath();
+            
+            // Efecto de sombra
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 3;
+            ctx.shadowOffsetY = 3;
+
+            switch(tipo) {
+                case 'texto':
+                    ctx.font = 'bold 24px Nunito';
+                    ctx.fillStyle = '#2563eb';
+                    ctx.fillText('Aa', x, y);
+                    break;
+                case 'imagen':
+                    ctx.fillStyle = '#16a34a';
+                    ctx.fillRect(x-15, y-15, 30, 30);
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(x, y-4, 4, 0, Math.PI*2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(x-15, y+15);
+                    ctx.lineTo(x-5, y+5);
+                    ctx.lineTo(x+15, y+15);
+                    ctx.fill();
+                    break;
+                case 'forma':
+                    ctx.fillStyle = '#eab308';
+                    ctx.moveTo(x, y-15);
+                    ctx.lineTo(x+10, y+15);
+                    ctx.lineTo(x-15, y-5);
+                    ctx.lineTo(x+15, y-5);
+                    ctx.lineTo(x-10, y+15);
+                    ctx.fill();
+                    break;
+                case 'video':
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fillRect(x-20, y-15, 40, 30);
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.moveTo(x-5, y-8);
+                    ctx.lineTo(x+8, y);
+                    ctx.lineTo(x-5, y+8);
+                    ctx.fill();
+                    break;
+            }
+            ctx.closePath();
+            
+            // Reset sombra para el proximo
+            ctx.shadowColor = 'transparent';
+        }
+
+        function limpiarCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            objetosData = { texto: 0, imagen: 0, forma: 0, video: 0 };
+            chartInstance.data.datasets[0].data = [0, 0, 0, 0];
+            chartInstance.update();
+            document.getElementById('totalObjetos').innerText = '0';
+        }
+
+        // --- GAMIFICACIÓN ---
+        function checkAnswer(questionId, isCorrect, btnElement) {
+            const card = document.getElementById(questionId + '-card');
+            const buttons = card.querySelectorAll('button');
+            
+            // Bloquear botones después de responder
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            });
+
+            // Resaltar selección
+            btnElement.style.opacity = '1';
+            
+            if(isCorrect) {
+                card.classList.add('correct');
+                btnElement.innerHTML += ' <i class="fas fa-check-circle text-green-400 float-right text-2xl"></i>';
+            } else {
+                card.classList.add('incorrect');
+                btnElement.innerHTML += ' <i class="fas fa-times-circle text-red-400 float-right text-2xl"></i>';
+            }
+        }
+
+        // Inicialización
+        window.onload = () => {
+            resizeCanvas();
+            initChart();
+        };
+    </script>
+</body>
+</html>
